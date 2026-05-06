@@ -1239,7 +1239,7 @@ body::after{
   <div class="filtros">
     <button class="filtro-btn active" onclick="setFiltro('Todos',this)">Todos</button>
     <button class="filtro-btn" onclick="setFiltro('Potes',this)"><i data-lucide="package-open" class="lc lc-sm"></i> Potes</button>
-    <button class="filtro-btn" onclick="setFiltro('Baldes',this)"><i data-lucide="bucket" class="lc lc-sm"></i> Baldes</button>
+    <button class="filtro-btn" onclick="setFiltro('Baldes',this)"><i data-lucide="archive" class="lc lc-sm"></i> Baldes</button>
     <button class="filtro-btn" onclick="setFiltro('Bombonas',this)"><i data-lucide="cylinder" class="lc lc-sm"></i> Bombonas</button>
   </div>
 
@@ -1650,7 +1650,7 @@ function renderProdutos(){
     const nomeTitle=toTitleCase(p.nome);
     const imgEl=p.imagem?`<img src="${p.imagem}" class="prod-img" alt="${nomeTitle}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' ;
     const placeholder=`<div class="prod-img-placeholder" ${p.imagem?'style="display:none"':''}><i data-lucide="package" class="lc" style="width:28px;height:28px;stroke:var(--text-muted)"></i></div>`;
-    const catIcon={Potes:'<i data-lucide="package-open" class="lc lc-sm"></i>',Baldes:'<i data-lucide="bucket" class="lc lc-sm"></i>',Bombonas:'<i data-lucide="cylinder" class="lc lc-sm"></i>'}[p.cat]||'<i data-lucide="package" class="lc lc-sm"></i>';
+    const catIcon={Potes:'<i data-lucide="package-open" class="lc lc-sm"></i>',Baldes:'<i data-lucide="archive" class="lc lc-sm"></i>',Bombonas:'<i data-lucide="cylinder" class="lc lc-sm"></i>'}[p.cat]||'<i data-lucide="package" class="lc lc-sm"></i>';
     return`<div class="produto-card" style="animation-delay:${Math.min(idx*0.03,0.5)}s">
       <div class="prod-top">
         <div class="prod-img-wrap">${imgEl}${placeholder}</div>
@@ -2235,7 +2235,7 @@ async function enviarEmail(){
   lucide.createIcons();
 
   try {
-    await emailjs.send('service_gr0j89k', 'template_jw34fcv', {
+    await emailjs.send('service_znzcz3g', 'template_jw34fcv', {
       nome_cliente:  nomeCliente,
       email_cliente: emailCliente,
       documento:     docVal ? `${docLabel}: ${docVal}` : 'Não informado',
