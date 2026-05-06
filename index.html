@@ -7,6 +7,7 @@
 <meta name="description" content="Calculadora de cotação Nastripack — Embalagens industriais B2B">
 <meta name="theme-color" content="#2563EB">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -885,7 +886,20 @@ body::after{
 .btn-wpp:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(37,211,102,.5),inset 0 1px 0 rgba(255,255,255,.25)}
 .btn-wpp:hover::before{left:100%}
 .btn-wpp:active{transform:translateY(0)}
-.btn-limpar{
+.btn-email{
+  background:linear-gradient(135deg,#0F4C81,#1a6baa);
+  color:white;
+  box-shadow:0 8px 24px rgba(15,76,129,.35),inset 0 1px 0 rgba(255,255,255,.2);
+  margin-top:8px;
+}
+.btn-email::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .6s;
+}
+.btn-email:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(15,76,129,.5),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-email:hover::before{left:100%}
+.btn-email:disabled{opacity:.6;cursor:not-allowed;transform:none}
   background:transparent;color:var(--text-muted);
   border:1px solid var(--border);margin-top:8px;font-size:12px;font-weight:700;
 }
@@ -1421,6 +1435,7 @@ body::after{
     </div>
 
     <button class="btn-block btn-wpp" onclick="gerarWhatsApp()"><i data-lucide="message-circle" class="lc lc-md"></i> Gerar mensagem para WhatsApp</button>
+    <button class="btn-block btn-email" onclick="enviarEmail()" id="btn-email"><i data-lucide="mail" class="lc lc-md"></i> Enviar cotação por E-mail</button>
     <button class="btn-block btn-limpar" onclick="limparCotacao()"><i data-lucide="trash-2" class="lc lc-md"></i> Limpar cotação</button>
   </div>
 </section>
@@ -1570,11 +1585,8 @@ body::after{
     </div>
     <div class="validade-row">
       <div class="campo"><label>Validade da proposta</label>
-        <select id="cli-validade">
-          <option value="3 dias">3 dias</option>
+        <select id="cli-validade" disabled style="cursor:not-allowed;opacity:.7">
           <option value="5 dias" selected>5 dias</option>
-          <option value="7 dias">7 dias</option>
-          <option value="15 dias">15 dias</option>
         </select>
       </div>
     </div>
@@ -2171,6 +2183,89 @@ function showToast(msg,type=''){
   t.textContent=msg;t.className='toast'+(type?' '+type:'');
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── EMAILJS ──────────────────────────────────────────────────────────────
+emailjs.init('qwmd_Lql-3jRwEoAo');
+
+async function enviarEmail(){
+  if(!cotacao.length){ showToast('⚠️ Adicione produtos antes de enviar','error'); return; }
+
+  const g = id => document.getElementById(id)?.value || '';
+
+  // Validar email do cliente
+  const emailCliente = modalidade==='entrega' ? g('frete-cli-email') : g('cli-email');
+  const nomeCliente  = modalidade==='entrega' ? g('frete-cli-nome')  : g('cli-nome');
+
+  if(!nomeCliente){ showToast('⚠️ Preencha o Nome do cliente','error'); showTab('cliente'); return; }
+  if(!emailCliente){ showToast('⚠️ Preencha o E-mail do cliente','error'); showTab('cliente'); return; }
+
+  // Montar lista de itens
+  const itens = cotacao.map((i,idx) =>
+    `${idx+1}. ${toTitleCase(i.nome)} — ${i.qty} un × ${i.preco>0 ? fmtMoeda(i.preco)+'/un' : 'a definir'} = ${i.preco>0 ? fmtMoeda(i.qty*i.preco) : 'a definir'}`
+  ).join('\n');
+
+  // Totais
+  const sub = cotacao.reduce((a,i) => a + i.qty*i.preco, 0);
+  const freteVal = (modalidade==='entrega' && getFreteStatus()==='cif') ? (parseFloat(g('frete-valor'))||0) : 0;
+  const total = sub + freteVal;
+
+  // Endereço
+  const end = getEnderecoEntrega();
+  const enderecoFormatado = modalidade==='entrega'
+    ? `${end.endereco}, ${end.numero} — ${end.bairro} — ${end.cidade}/${end.estado} — CEP: ${end.cep}${end.referencia ? ' — Ref: '+end.referencia : ''}`
+    : 'Retirada na loja — Rua das Laranjeiras, 407 · SBC/SP';
+
+  // Frete
+  const status = modalidade==='entrega' ? getFreteStatus() : 'retirada';
+  const freteTexto = status==='cif'
+    ? (freteVal>0 ? `MELHOR FRETE/PACK GARANTIDO: ${fmtMoeda(freteVal)}` : 'MELHOR FRETE/PACK GARANTIDO — A confirmar com parceiros logísticos')
+    : status==='fob' ? 'Frete FOB — Por conta do cliente'
+    : 'Retirada na loja';
+
+  // Documento
+  const tipoPJ = document.getElementById('btn-pj').classList.contains('active');
+  const docVal = tipoPJ ? g('cli-cnpj') : g('cli-cpf');
+  const docLabel = tipoPJ ? 'CNPJ' : 'CPF';
+
+  // Desabilitar botão durante envio
+  const btn = document.getElementById('btn-email');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader" class="lc lc-md"></i> Enviando...';
+  lucide.createIcons();
+
+  try {
+    await emailjs.send('service_gr0j89k', 'template_jw34fcv', {
+      nome_cliente:  nomeCliente,
+      email_cliente: emailCliente,
+      documento:     docVal ? `${docLabel}: ${docVal}` : 'Não informado',
+      cidade:        end.cidade ? `${end.cidade}/${end.estado}` : g('cli-cidade') || 'Não informada',
+      itens:         itens,
+      entrega:       enderecoFormatado,
+      frete:         freteTexto,
+      subtotal:      fmtMoeda(sub),
+      total:         fmtMoeda(total),
+      pagamento:     g('cli-pgto') || 'Não informado',
+      observacoes:   g('cli-obs') || 'Nenhuma',
+      reply_to:      emailCliente,
+    });
+
+    showToast('✅ Cotação enviada para vendas@nastripack.com.br!', 'success');
+    btn.innerHTML = '<i data-lucide="check-circle" class="lc lc-md"></i> E-mail enviado!';
+    lucide.createIcons();
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="mail" class="lc lc-md"></i> Enviar cotação por E-mail';
+      lucide.createIcons();
+    }, 4000);
+
+  } catch(err) {
+    console.error('EmailJS erro:', err);
+    showToast('❌ Erro ao enviar. Tente novamente.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="mail" class="lc lc-md"></i> Enviar cotação por E-mail';
+    lucide.createIcons();
+  }
 }
 
 function iniciarCotacao(){
