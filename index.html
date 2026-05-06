@@ -1051,6 +1051,104 @@ body::after{
   animation:pulseDot 1s ease-in-out infinite;
 }
 
+/* BOTÃO FLUTUANTE IR PARA CADASTRO */
+.btn-ir-cadastro-wrap{
+  position:fixed;
+  bottom:24px;left:50%;
+  transform:translateX(-50%);
+  z-index:200;
+  width:calc(100% - 32px);
+  max-width:648px;
+  animation:slideUpBtn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUpBtn{
+  from{opacity:0;transform:translateX(-50%) translateY(20px)}
+  to{opacity:1;transform:translateX(-50%) translateY(0)}
+}
+.btn-ir-cadastro{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;
+  border:none;cursor:pointer;
+  border-radius:var(--radius);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--gradient-blue);
+  box-shadow:0 8px 32px rgba(37,99,235,0.55),0 2px 8px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+}
+.btn-ir-cadastro::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  animation:shimmerBtn 2.5s infinite;
+}
+@keyframes shimmerBtn{
+  0%{left:-100%}100%{left:200%}
+}
+.btn-ir-cadastro:hover{
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(37,99,235,0.7),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-ir-cadastro:active{transform:translateY(-1px)}
+.btn-ir-cadastro-left{
+  display:flex;align-items:center;gap:14px;
+}
+.btn-ir-cadastro-texto{
+  display:flex;flex-direction:column;gap:2px;text-align:left;
+}
+.btn-ir-cadastro-texto strong{
+  font-size:15px;font-weight:800;color:#fff;letter-spacing:-.2px;
+}
+.btn-ir-cadastro-texto small{
+  font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;
+}
+
+/* BOTÃO FLUTUANTE IR PARA CADASTRO */
+.btn-ir-cadastro-wrap{
+  position:sticky;
+  bottom:16px;
+  z-index:30;
+  margin-top:16px;
+  max-width:680px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:0 16px;
+  animation:fadeUp .4s cubic-bezier(.34,1.56,.64,1);
+}
+.btn-ir-cadastro{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border:none;cursor:pointer;
+  border-radius:var(--radius);font-family:'Plus Jakarta Sans',sans-serif;
+  background:linear-gradient(135deg,#16a34a,#15803d);
+  box-shadow:0 8px 32px rgba(22,163,74,0.5),0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+}
+.btn-ir-cadastro::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transition:left .6s;
+}
+.btn-ir-cadastro:hover{
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(22,163,74,0.6),0 4px 16px rgba(0,0,0,0.4);
+}
+.btn-ir-cadastro:hover::before{left:100%}
+.btn-ir-cadastro:active{transform:translateY(-1px)}
+.btn-ir-cadastro-left{
+  display:flex;align-items:center;gap:14px;
+}
+.btn-ir-cadastro-texto{
+  display:flex;flex-direction:column;gap:2px;text-align:left;
+}
+.btn-ir-cadastro-texto strong{
+  font-size:14px;font-weight:800;color:#fff;display:block;
+}
+.btn-ir-cadastro-texto small{
+  font-size:11px;color:rgba(255,255,255,0.8);display:block;font-weight:500;
+}
+.btn-ir-cadastro .lc{stroke:#fff}
+
 /* BOTÃO FINALIZAR COTAÇÃO */
 .btn-finalizar-wrap{
   margin-top:24px;
@@ -1259,7 +1357,36 @@ body::after{
 
   <div id="contagem" class="contagem"></div>
   <div id="lista-produtos"></div>
+
+  <!-- BOTÃO FLUTUANTE — aparece ao adicionar produto -->
+  <div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
+    <button class="btn-ir-cadastro" onclick="showTab('cliente')">
+      <span class="btn-ir-cadastro-left">
+        <i data-lucide="user" class="lc lc-lg"></i>
+        <span class="btn-ir-cadastro-texto">
+          <strong>Preencher dados do cliente</strong>
+          <small id="ir-cadastro-count">0 produto(s) selecionado(s)</small>
+        </span>
+      </span>
+      <i data-lucide="arrow-right" class="lc lc-lg"></i>
+    </button>
+  </div>
+
 </section>
+
+<!-- BOTÃO FLUTUANTE IR PARA CADASTRO -->
+<div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
+  <button class="btn-ir-cadastro" onclick="showTab('cliente')">
+    <span class="btn-ir-cadastro-left">
+      <i data-lucide="user" class="lc lc-lg"></i>
+      <span class="btn-ir-cadastro-texto">
+        <strong>Preencher dados do cliente</strong>
+        <small id="badge-produtos-texto">0 produto(s) selecionado(s)</small>
+      </span>
+    </span>
+    <i data-lucide="arrow-right" class="lc lc-lg"></i>
+  </button>
+</div>
 
 <!-- COTAÇÃO -->
 <section id="tab-cotacao-body" style="display:none">
@@ -1573,15 +1700,16 @@ body::after{
   <div class="cliente-card">
     <div class="campo">
       <label>Forma de pagamento</label>
-      <select id="cli-pgto">
+      <select id="cli-pgto" onchange="mostrarObsPgto(this.value)">
         <option value="">Selecione...</option>
-        <option>À vista (PIX / boleto)</option>
-        <option>30 dias</option>
-        <option>30/60 dias</option>
-        <option>30/60/90 dias</option>
-        <option>Cartão de Crédito em 06x sem juros</option>
-        <option>A combinar</option>
+        <option value="À vista (PIX / Boleto)">À vista (PIX / Boleto)</option>
+        <option value="Cartão de Crédito (06x Fixas)">Cartão de Crédito (06x Fixas)</option>
+        <option value="Faturado">Faturado</option>
       </select>
+      <div id="obs-faturado" style="display:none;margin-top:8px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#FBBF24;display:none;align-items:flex-start;gap:8px">
+        <i data-lucide="alert-triangle" class="lc lc-sm lc-yellow" style="flex-shrink:0;margin-top:1px"></i>
+        <span>⚠️ <strong>Atenção:</strong> A condição de faturamento está disponível a partir da segunda compra. A primeira compra é realizada à vista (PIX / Boleto).</span>
+      </div>
     </div>
     <div class="validade-row">
       <div class="campo"><label>Validade da proposta</label>
@@ -1601,8 +1729,8 @@ body::after{
     <button class="btn-finalizar-cotacao" onclick="showTab('cotacao')">
       <span class="btn-finalizar-icon"><i data-lucide="file-text" class="lc lc-xl"></i></span>
       <span class="btn-finalizar-texto">
-        <strong>Ir para Cotação</strong>
-        <small>Adicione os produtos e gere a proposta</small>
+        <strong>Finalizar Cotação</strong>
+        <small>Escolha a Modalidade do Envio</small>
       </span>
       <span class="btn-finalizar-arrow"><i data-lucide="arrow-right" class="lc lc-lg"></i></span>
     </button>
@@ -1699,7 +1827,31 @@ function remover(id){cotacao=cotacao.filter(i=>i.id!==id);renderCotacao();atuali
 
 function atualizarBadge(){
   const b=document.getElementById('badge');
-  b.textContent=cotacao.length;b.style.display=cotacao.length?'inline-block':'none';
+  b.textContent=cotacao.length;
+  b.style.display=cotacao.length?'inline-block':'none';
+
+  // Botão flutuante ir para cadastro
+  const wrap=document.getElementById('btn-ir-cadastro-wrap');
+  const count=document.getElementById('ir-cadastro-count');
+  if(cotacao.length>0){
+    wrap.style.display='block';
+    const total=cotacao.reduce((a,i)=>a+i.qty,0);
+    if(count) count.textContent=`${cotacao.length} produto${cotacao.length>1?'s':''} · ${total} unidade${total>1?'s':''} selecionada${total>1?'s':''}`;
+    lucide.createIcons();
+  }else{
+    wrap.style.display='none';
+  }
+}
+
+function mostrarObsPgto(val){
+  const obs = document.getElementById('obs-faturado');
+  if(!obs) return;
+  if(val === 'Faturado'){
+    obs.style.display = 'flex';
+    lucide.createIcons();
+  } else {
+    obs.style.display = 'none';
+  }
 }
 
 function getFreteStatus(){
@@ -1765,7 +1917,7 @@ function renderCotacao(){
           <span class="item-x">×</span>
           <div class="item-preco-wrap">
             <span class="item-rs">R$</span>
-            <input type="number" class="item-preco-input" id="preco-${i.id}" value="${i.preco>0?i.preco:''}" placeholder="0,00" min="0" step="0.01" oninput="atualizarPrecoItem(${i.id},this.value)">
+            <input type="number" class="item-preco-input frete-valor-inativo" id="preco-${i.id}" value="${i.preco>0?i.preco:''}" placeholder="0,00" min="0" step="0.01" disabled style="cursor:not-allowed;opacity:.5">
           </div>
           <span class="item-total-val" id="total-item-${i.id}">${i.preco>0?fmtMoeda(i.qty*i.preco):'—'}</span>
         </div>
@@ -2057,7 +2209,6 @@ function gerarWhatsApp(){
 
   const g = id => document.getElementById(id)?.value || '';
 
-  // Validar campos obrigatórios conforme modalidade
   if(modalidade === 'entrega') {
     const obrigFrete = [
       {id:'frete-cli-nome', label:'Nome / Empresa'},
@@ -2075,90 +2226,99 @@ function gerarWhatsApp(){
       document.getElementById(vazios[0].id)?.focus();
       return;
     }
-    // Validar endereço alternativo se aberto
-    if(temEnderecoAlternativo()) {
-      if(!g('alt-cep') || !g('alt-cidade') || !g('alt-endereco') || !g('alt-numero')) {
-        showToast('⚠️ Preencha o endereço alternativo completo','error'); return;
-      }
-    }
   }
 
-  // Dados do cliente
-  const nome = modalidade==='entrega' ? g('frete-cli-nome') : g('cli-nome');
-  const email = modalidade==='entrega' ? g('frete-cli-email') : g('cli-email');
-  const pgto = g('cli-pgto');
-  const validade = g('cli-validade') || '5 dias';
-  const obs = g('cli-obs');
-  const cnpj = g('cli-cnpj'), cpf = g('cli-cpf');
-  const tipoPJ = document.getElementById('btn-pj').classList.contains('active');
+  const nome     = modalidade==='entrega' ? g('frete-cli-nome')  : g('cli-nome');
+  const email    = modalidade==='entrega' ? g('frete-cli-email') : g('cli-email');
+  const pgto     = g('cli-pgto');
+  const obs      = g('cli-obs');
+  const cnpj     = g('cli-cnpj'), cpf = g('cli-cpf');
+  const tipoPJ   = document.getElementById('btn-pj').classList.contains('active');
   const docLabel = tipoPJ ? 'CNPJ' : 'CPF';
-  const docVal = tipoPJ ? cnpj : cpf;
-  const sub = cotacao.reduce((a,i) => a + i.qty * i.preco, 0);
-  const freteVal = (modalidade==='entrega' && getFreteStatus()==='incluso') ? (parseFloat(g('frete-valor'))||0) : 0;
-  const total = sub + freteVal;
+  const docVal   = tipoPJ ? cnpj : cpf;
+  const end      = getEnderecoEntrega();
+  const status   = getFreteStatus();
+  const freteVal = (modalidade==='entrega' && status==='cif') ? (parseFloat(g('frete-valor'))||0) : 0;
+  const sub      = cotacao.reduce((a,i) => a + i.qty * i.preco, 0);
+  const total    = sub + freteVal;
+  const hoje     = new Date().toLocaleDateString('pt-BR');
+  const prazoEl  = status==='cif' ? document.getElementById('prazo-entrega') : document.getElementById('prazo-entrega-2');
+  const prazoV   = prazoEl?.value || 'A confirmar';
+  const modFrete = modalidade==='entrega'
+    ? (status==='cif' ? 'CIF' : 'FOB') : 'RETIRADA';
+  const endCliente = modalidade==='entrega'
+    ? `${end.endereco}, ${end.numero}${end.bairro?', '+end.bairro:''}, ${end.cidade}/${end.estado}, CEP: ${end.cep}${end.referencia?' (Ref: '+end.referencia+')':''}`
+    : 'Rua das Laranjeiras, 407, Parque Terra Nova, SBC/SP, CEP 09820-480';
 
-  // Endereço de entrega
-  const end = getEnderecoEntrega();
-  const fatEndereco = {
-    cep: g('cli-cep'), estado: g('cli-estado'), cidade: g('cli-cidade'),
-    bairro: g('cli-bairro'), endereco: g('cli-endereco'), numero: g('cli-numero'),
-    referencia: g('cli-referencia'),
-  };
+  let msg = '';
+  msg += `╔══════════════════════════════╗\n`;
+  msg += `         *COTAÇÃO B2B*\n`;
+  msg += `╚══════════════════════════════╝\n\n`;
 
-  let msg = '*COTAÇÃO NASTRIPACK*\n';
-  msg += '━━━━━━━━━━━━━━━━━━━━\n';
-  if(nome) msg += `👤 *Cliente:* ${nome}\n`;
-  if(docVal) msg += `📄 *${docLabel}:* ${docVal}\n`;
-  if(email) msg += `📧 *E-mail:* ${email}\n`;
+  msg += `*DE:*\n`;
+  msg += `*NASTRIPACK EMBALAGENS INDUSTRIAIS*\n`;
+  msg += `Rua das Laranjeiras, 407 — Parque Terra Nova\n`;
+  msg += `São Bernardo do Campo - SP — CEP 09820-480\n`;
+  msg += `Tel: (11) 91413-4471\n`;
+  msg += `CNPJ: 20.070.429/0001-62 | IE: 635.824.380.110\n\n`;
 
-  // Endereço de faturamento (aba cliente, se preenchido)
-  if(fatEndereco.endereco && modalidade === 'entrega') {
-    msg += `\n🏢 *Endereço de faturamento:*\n`;
-    msg += `   ${fatEndereco.endereco}, ${fatEndereco.numero}\n`;
-    if(fatEndereco.bairro) msg += `   ${fatEndereco.bairro}\n`;
-    if(fatEndereco.cidade) msg += `   ${fatEndereco.cidade} - ${fatEndereco.estado}\n`;
-    if(fatEndereco.cep) msg += `   CEP: ${fatEndereco.cep}\n`;
-    if(fatEndereco.referencia) msg += `   Ref: ${fatEndereco.referencia}\n`;
-  }
+  msg += `*PARA:*\n`;
+  msg += `*${nome}*\n`;
+  if(docVal) msg += `${docLabel}: ${docVal}\n`;
+  if(email)  msg += `E-mail: ${email}\n`;
+  msg += `${endCliente}\n\n`;
 
-  msg += '\n*ITENS:*\n';
-  cotacao.forEach((i,idx) => msg += `${idx+1}. ${toTitleCase(i.nome)}\n   ${i.qty} un × ${i.preco>0 ? fmtMoeda(i.preco)+'/un' : '-'} = *${i.preco>0 ? fmtMoeda(i.qty*i.preco) : 'a definir'}*\n`);
-  msg += '━━━━━━━━━━━━━━━━━━━━\n';
-  msg += `📦 Subtotal produtos: ${fmtMoeda(sub)}\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg += `*VENDEDOR:* Daniel  |  *DATA:* ${hoje}\n`;
+  msg += `*NCM:* 39249000  |  *IPI:* 0%  |  *ICMS:* Incluso\n`;
+  msg += `*PAGAMENTO:* ${pgto || 'A definir'}\n`;
+  msg += `*ENTREGA:* ${modFrete}  |  *RETIRADA:* SBCAMPO - SP\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-  if(modalidade === 'entrega') {
-    const status = getFreteStatus();
-    const prazoEl = status==='incluso' ? document.getElementById('prazo-entrega') : document.getElementById('prazo-entrega-2');
-    const prazoV = prazoEl?.value || '';
-    msg += `\n🚚 *Endereço de entrega:*\n`;
-    msg += `   ${end.endereco}, ${end.numero}\n`;
-    if(end.bairro) msg += `   ${end.bairro}\n`;
-    if(end.cidade) msg += `   ${end.cidade} - ${end.estado}\n`;
-    if(end.cep) msg += `   CEP: ${end.cep}\n`;
-    if(end.referencia) msg += `   Ref: ${end.referencia}\n`;
-    msg += '\n';
-    if(status === 'cif') {
-      const fv = parseFloat(document.getElementById('frete-valor')?.value)||0;
-      if(fv > 0) {
-        msg += `🌟 *MELHOR FRETE/PACK GARANTIDO:* ${fmtMoeda(fv)}\n`;
-      } else {
-        msg += `🌟 *MELHOR FRETE/PACK GARANTIDO* — Vamos pesquisar com nossos parceiros os melhores preços e entraremos em contato.\n`;
-      }
-    } else {
-      msg += `🚚 *Frete FOB* — O cliente será responsável pelos custos do envio.\n`;
-    }
-    if(prazoV) msg += `   Prazo estimado: ${prazoV}\n`;
-  } else {
-    msg += '🏭 Retirada na loja — Rua das Laranjeiras, 407 · SBC/SP\n';
-  }
+  msg += `*Qtd | Descrição | Preço Unit. | Preço Total*\n`;
+  msg += `──────────────────────────────\n`;
+  cotacao.forEach((i,idx) => {
+    const pu = i.preco > 0 ? fmtMoeda(i.preco) : 'a definir';
+    const pt = i.preco > 0 ? fmtMoeda(i.qty * i.preco) : 'a definir';
+    msg += `${i.qty}x | ${toTitleCase(i.nome)} | ${pu} | *${pt}*\n`;
+  });
+  msg += `──────────────────────────────\n`;
+  msg += `IPI: 0% A INCLUIR\n`;
+  msg += `ICMS: INCLUSO\n`;
 
-  msg += '━━━━━━━━━━━━━━━━━━━━\n';
-  msg += `💰 *TOTAL: ${fmtMoeda(total)}*\n`;
-  msg += '━━━━━━━━━━━━━━━━━━━━\n';
-  if(pgto) msg += `💳 Pagamento: ${pgto}\n`;
-  msg += `⏳ Validade: ${validade}\n`;
-  if(obs) msg += `📝 Obs: ${obs}\n`;
-  msg += '\n_Nastripack — Embalagens Industriais_';
+  if(modalidade==='entrega' && status==='cif' && freteVal>0) msg += `Frete CIF: ${fmtMoeda(freteVal)}\n`;
+  if(modalidade==='entrega' && status==='cif' && freteVal===0) msg += `Frete CIF: A confirmar com parceiros logísticos\n`;
+  if(modalidade==='entrega' && status==='fob') msg += `Frete FOB: Por conta do cliente\n`;
+
+  msg += `*TOTAL: ${fmtMoeda(total)}*\n\n`;
+
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg += `📦 *PRAZOS E CONDIÇÕES:*\n`;
+  msg += `• Envio: 2 a 3 dias após confirmação do pagamento\n`;
+  msg += `• Entrega pela transportadora: 6 a 8 dias úteis\n`;
+  msg += `• PIX: 20.070.429/0001-62\n\n`;
+
+  msg += `⚠️ *IMPORTANTE:*\n`;
+  msg += `Solicitamos que a conferência dos produtos seja realizada no ato da entrega. Após a validação do recebimento, não realizamos trocas ou estornos. *NÃO ACEITAMOS DEVOLUÇÕES APÓS 7 DIAS DO RECEBIMENTO.*\n\n`;
+
+  msg += `📋 Esta cotação está sujeita a mudança de preços e encargos. *Válido por 5 dias.*\n\n`;
+
+  msg += `📜 _É de responsabilidade exclusiva do cliente a definição da embalagem adequada, incluindo aplicação específica, cumprimento regulamentar, compatibilidade, transporte, armazenagem e manipulação. A Nastripack se isenta de quaisquer garantias expressas ou implícitas._\n\n`;
+
+
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg += `📦 *PRAZOS:*\n`;
+  msg += `• PRAZO PARA ENVIO: 2 A 3 DIAS APÓS A CONFIRMAÇÃO DE PAGAMENTO\n`;
+  msg += `• PIX: 20.070.429/0001-62\n`;
+  msg += `• PRAZO DE ENTREGA PELA TRANSPORTADORA COTADA: 6 A 8 DIAS ÚTEIS\n\n`;
+  msg += `⚠️ *IMPORTANTE:*\n`;
+  msg += `Solicitamos que a conferência dos produtos seja realizada no ato da entrega. Após a validação do recebimento e a conferência do material, não realizamos trocas ou estornos. Caso seja identificada qualquer divergência, avaria ou irregularidade no momento da entrega, pedimos que nos comunique imediatamente para providenciarmos a devida substituição conforme os padrões de qualidade Nastripack. *NÃO ACEITAMOS DEVOLUÇÕES APÓS 7 DIAS DO RECEBIMENTO DO MATERIAL.*\n\n`;
+  msg += `📋 Esta é uma cotação referente às mercadorias acima citadas e está sujeita a mudança de preços e encargos. *Válido por 5 dias.*\n\n`;
+  msg += `📜 _"É de responsabilidade exclusiva do cliente a definição da embalagem adequada, incluindo a sua aplicação específica, cumprimento regulamentar das normas e legislações aplicáveis, compatibilidade, transporte, armazenagem, manipulação e requisitos do produto. Mediante ao exposto, a Nastripack se isenta de quaisquer garantias, sejam elas expressas ou implícitas."_\n\n`;
+  if(obs) msg += `📝 *Observações:* ${obs}\n\n`;
+  msg += `_Agradecemos a preferência!_\n`;
+  msg += `_São Bernardo do Campo, ${hoje}_\n`;
+  msg += `_Nastripack Embalagens Industriais_`;
 
   navigator.clipboard.writeText(msg)
     .then(() => showToast('✓ Copiado! Cole no WhatsApp','success'))
@@ -2167,6 +2327,8 @@ function gerarWhatsApp(){
 function showTab(tab){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   ['tab-produtos','tab-cliente-body','tab-cotacao-body'].forEach(id=>document.getElementById(id).style.display='none');
+  // Esconder botão flutuante ao sair de produtos
+  document.getElementById('btn-ir-cadastro-wrap').style.display='none';
   const map={
     produtos:['tab-produtos',0],
     cliente: ['tab-cliente-body',1],
@@ -2176,6 +2338,9 @@ function showTab(tab){
   document.getElementById(elId).style.display='block';
   document.querySelectorAll('.tab-btn')[idx].classList.add('active');
   if(tab==='cotacao')renderCotacao();
+  // Mostrar botão flutuante se voltar para produtos e tiver itens
+  if(tab==='produtos') atualizarBadge();
+  lucide.createIcons();
 }
 
 function showToast(msg,type=''){
@@ -2192,43 +2357,42 @@ async function enviarEmail(){
   if(!cotacao.length){ showToast('⚠️ Adicione produtos antes de enviar','error'); return; }
 
   const g = id => document.getElementById(id)?.value || '';
-
-  // Validar email do cliente
   const emailCliente = modalidade==='entrega' ? g('frete-cli-email') : g('cli-email');
   const nomeCliente  = modalidade==='entrega' ? g('frete-cli-nome')  : g('cli-nome');
 
   if(!nomeCliente){ showToast('⚠️ Preencha o Nome do cliente','error'); showTab('cliente'); return; }
   if(!emailCliente){ showToast('⚠️ Preencha o E-mail do cliente','error'); showTab('cliente'); return; }
 
-  // Montar lista de itens
-  const itens = cotacao.map((i,idx) =>
-    `${idx+1}. ${toTitleCase(i.nome)} — ${i.qty} un × ${i.preco>0 ? fmtMoeda(i.preco)+'/un' : 'a definir'} = ${i.preco>0 ? fmtMoeda(i.qty*i.preco) : 'a definir'}`
-  ).join('\n');
+  const cnpj    = g('cli-cnpj'), cpf = g('cli-cpf');
+  const tipoPJ  = document.getElementById('btn-pj').classList.contains('active');
+  const docLabel= tipoPJ ? 'CNPJ' : 'CPF';
+  const docVal  = tipoPJ ? cnpj : cpf;
+  const pgto    = g('cli-pgto');
+  const obs     = g('cli-obs');
+  const end     = getEnderecoEntrega();
+  const status  = getFreteStatus();
+  const freteVal= (modalidade==='entrega' && status==='cif') ? (parseFloat(g('frete-valor'))||0) : 0;
+  const sub     = cotacao.reduce((a,i) => a + i.qty * i.preco, 0);
+  const total   = sub + freteVal;
+  const hoje    = new Date().toLocaleDateString('pt-BR');
+  const prazoEl = status==='cif' ? document.getElementById('prazo-entrega') : document.getElementById('prazo-entrega-2');
+  const prazoV  = prazoEl?.value || 'A confirmar';
+  const modFrete= modalidade==='entrega' ? (status==='cif' ? 'CIF' : 'FOB') : 'RETIRADA';
 
-  // Totais
-  const sub = cotacao.reduce((a,i) => a + i.qty*i.preco, 0);
-  const freteVal = (modalidade==='entrega' && getFreteStatus()==='cif') ? (parseFloat(g('frete-valor'))||0) : 0;
-  const total = sub + freteVal;
+  const endCliente = modalidade==='entrega'
+    ? `${end.endereco}, ${end.numero}${end.bairro?', '+end.bairro:''}, ${end.cidade}/${end.estado}, CEP: ${end.cep}`
+    : 'Rua das Laranjeiras, 407, Parque Terra Nova, SBC/SP, CEP 09820-480';
 
-  // Endereço
-  const end = getEnderecoEntrega();
-  const enderecoFormatado = modalidade==='entrega'
-    ? `${end.endereco}, ${end.numero} — ${end.bairro} — ${end.cidade}/${end.estado} — CEP: ${end.cep}${end.referencia ? ' — Ref: '+end.referencia : ''}`
-    : 'Retirada na loja — Rua das Laranjeiras, 407 · SBC/SP';
+  const itens = cotacao.map((i,idx) => {
+    const pu = i.preco > 0 ? fmtMoeda(i.preco) : 'a definir';
+    const pt = i.preco > 0 ? fmtMoeda(i.qty*i.preco) : 'a definir';
+    return `${i.qty}x  ${toTitleCase(i.nome)}  |  Unit: ${pu}  |  Total: ${pt}`;
+  }).join('\n');
 
-  // Frete
-  const status = modalidade==='entrega' ? getFreteStatus() : 'retirada';
-  const freteTexto = status==='cif'
-    ? (freteVal>0 ? `MELHOR FRETE/PACK GARANTIDO: ${fmtMoeda(freteVal)}` : 'MELHOR FRETE/PACK GARANTIDO — A confirmar com parceiros logísticos')
-    : status==='fob' ? 'Frete FOB — Por conta do cliente'
-    : 'Retirada na loja';
+  const freteTexto = modalidade==='entrega'
+    ? (status==='cif' ? (freteVal>0 ? `CIF: ${fmtMoeda(freteVal)}` : 'CIF — A confirmar com parceiros') : 'FOB — Por conta do cliente')
+    : 'Retirada na loja em SBC/SP';
 
-  // Documento
-  const tipoPJ = document.getElementById('btn-pj').classList.contains('active');
-  const docVal = tipoPJ ? g('cli-cnpj') : g('cli-cpf');
-  const docLabel = tipoPJ ? 'CNPJ' : 'CPF';
-
-  // Desabilitar botão durante envio
   const btn = document.getElementById('btn-email');
   btn.disabled = true;
   btn.innerHTML = '<i data-lucide="loader" class="lc lc-md"></i> Enviando...';
@@ -2236,21 +2400,28 @@ async function enviarEmail(){
 
   try {
     await emailjs.send('service_znzcz3g', 'template_jw34fcv', {
+      de_empresa:    'NASTRIPACK EMBALAGENS INDUSTRIAIS',
+      de_endereco:   'Rua das Laranjeiras, 407 — Parque Terra Nova — SBC/SP — CEP 09820-480',
+      de_tel:        '(11) 91413-4471',
+      de_cnpj:       '20.070.429/0001-62',
+      de_ie:         '635.824.380.110',
       nome_cliente:  nomeCliente,
-      email_cliente: emailCliente,
       documento:     docVal ? `${docLabel}: ${docVal}` : 'Não informado',
-      cidade:        end.cidade ? `${end.cidade}/${end.estado}` : g('cli-cidade') || 'Não informada',
+      email_cliente: emailCliente,
+      endereco_cli:  endCliente,
+      data:          hoje,
+      pagamento:     pgto || 'A definir',
+      entrega:       modFrete,
+      prazo:         prazoV,
       itens:         itens,
-      entrega:       enderecoFormatado,
-      frete:         freteTexto,
       subtotal:      fmtMoeda(sub),
+      frete:         freteTexto,
       total:         fmtMoeda(total),
-      pagamento:     g('cli-pgto') || 'Não informado',
-      observacoes:   g('cli-obs') || 'Nenhuma',
+      observacoes:   obs || 'Nenhuma',
       reply_to:      emailCliente,
     });
 
-    showToast('✅ Cotação enviada para vendas@nastripack.com.br!', 'success');
+    showToast('✅ Cotação enviada por e-mail!', 'success');
     btn.innerHTML = '<i data-lucide="check-circle" class="lc lc-md"></i> E-mail enviado!';
     lucide.createIcons();
     setTimeout(() => {
