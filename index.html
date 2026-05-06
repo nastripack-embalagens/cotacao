@@ -1708,7 +1708,7 @@ body::after{
       </select>
       <div id="obs-faturado" style="display:none;margin-top:8px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#FBBF24;display:none;align-items:flex-start;gap:8px">
         <i data-lucide="alert-triangle" class="lc lc-sm lc-yellow" style="flex-shrink:0;margin-top:1px"></i>
-        <span>⚠️ <strong>Atenção:</strong> A condição de faturamento está disponível a partir da segunda compra. A primeira compra é realizada à vista (PIX / Boleto).</span>
+        <span>⚠️ <strong>Atenção:</strong> A condição de faturamento está disponível a partir da segunda compra. A primeira compra é realizada à vista (PIX / Boleto ou Cartão de Crédito).</span>
       </div>
     </div>
     <div class="validade-row">
@@ -2244,17 +2244,19 @@ function gerarWhatsApp(){
   const hoje     = new Date().toLocaleDateString('pt-BR');
   const prazoEl  = status==='cif' ? document.getElementById('prazo-entrega') : document.getElementById('prazo-entrega-2');
   const prazoV   = prazoEl?.value || 'A confirmar';
-  const modFrete = modalidade==='entrega'
-    ? (status==='cif' ? 'CIF' : 'FOB') : 'RETIRADA';
+  const modFrete = modalidade==='entrega' ? (status==='cif' ? 'CIF' : 'FOB') : 'RETIRADA';
   const endCliente = modalidade==='entrega'
     ? `${end.endereco}, ${end.numero}${end.bairro?', '+end.bairro:''}, ${end.cidade}/${end.estado}, CEP: ${end.cep}${end.referencia?' (Ref: '+end.referencia+')':''}`
     : 'Rua das Laranjeiras, 407, Parque Terra Nova, SBC/SP, CEP 09820-480';
 
   let msg = '';
+
+  // ── CABEÇALHO ──
   msg += `╔══════════════════════════════╗\n`;
   msg += `         *COTAÇÃO B2B*\n`;
   msg += `╚══════════════════════════════╝\n\n`;
 
+  // ── DE ──
   msg += `*DE:*\n`;
   msg += `*NASTRIPACK EMBALAGENS INDUSTRIAIS*\n`;
   msg += `Rua das Laranjeiras, 407 — Parque Terra Nova\n`;
@@ -2262,60 +2264,54 @@ function gerarWhatsApp(){
   msg += `Tel: (11) 91413-4471\n`;
   msg += `CNPJ: 20.070.429/0001-62 | IE: 635.824.380.110\n\n`;
 
+  // ── PARA ──
   msg += `*PARA:*\n`;
   msg += `*${nome}*\n`;
   if(docVal) msg += `${docLabel}: ${docVal}\n`;
   if(email)  msg += `E-mail: ${email}\n`;
   msg += `${endCliente}\n\n`;
 
+  // ── VENDEDOR | DATA ──
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
   msg += `*VENDEDOR:* Daniel  |  *DATA:* ${hoje}\n`;
-  msg += `*NCM:* 39249000  |  *IPI:* 0%  |  *ICMS:* Incluso\n`;
-  msg += `*PAGAMENTO:* ${pgto || 'A definir'}\n`;
-  msg += `*ENTREGA:* ${modFrete}  |  *RETIRADA:* SBCAMPO - SP\n`;
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-  msg += `*Qtd | Descrição | Preço Unit. | Preço Total*\n`;
+  // ── ITENS ──
+  msg += `*ITENS DA COTAÇÃO:*\n`;
   msg += `──────────────────────────────\n`;
-  cotacao.forEach((i,idx) => {
+  cotacao.forEach((i) => {
     const pu = i.preco > 0 ? fmtMoeda(i.preco) : 'a definir';
     const pt = i.preco > 0 ? fmtMoeda(i.qty * i.preco) : 'a definir';
-    msg += `${i.qty}x | ${toTitleCase(i.nome)} | ${pu} | *${pt}*\n`;
+    msg += `${i.qty}x | ${toTitleCase(i.nome)}\n     Unit: ${pu} | Total: *${pt}*\n`;
   });
-  msg += `──────────────────────────────\n`;
-  msg += `IPI: 0% A INCLUIR\n`;
-  msg += `ICMS: INCLUSO\n`;
+  msg += `──────────────────────────────\n\n`;
 
+  // ── OBSERVAÇÃO ──
+  if(obs) msg += `📝 *Observações:* ${obs}\n\n`;
+
+  // ── TOTAIS ──
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  msg += `IPI: 0% A INCLUIR | ICMS: INCLUSO\n`;
   if(modalidade==='entrega' && status==='cif' && freteVal>0) msg += `Frete CIF: ${fmtMoeda(freteVal)}\n`;
   if(modalidade==='entrega' && status==='cif' && freteVal===0) msg += `Frete CIF: A confirmar com parceiros logísticos\n`;
   if(modalidade==='entrega' && status==='fob') msg += `Frete FOB: Por conta do cliente\n`;
-
+  if(modalidade==='retirada') msg += `Retirada: Na loja em SBC/SP\n`;
   msg += `*TOTAL: ${fmtMoeda(total)}*\n\n`;
 
-  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg += `📦 *PRAZOS E CONDIÇÕES:*\n`;
-  msg += `• Envio: 2 a 3 dias após confirmação do pagamento\n`;
-  msg += `• Entrega pela transportadora: 6 a 8 dias úteis\n`;
-  msg += `• PIX: 20.070.429/0001-62\n\n`;
+  // ── NCM | PAGAMENTO | ENTREGA ──
+  msg += `*NCM:* 39249000  |  *IPI:* 0%  |  *ICMS:* Incluso\n`;
+  msg += `*PAGAMENTO:* ${pgto || 'A definir'}\n`;
+  msg += `*ENTREGA:* ${modFrete}  |  *PRAZO:* ${prazoV}\n\n`;
 
-  msg += `⚠️ *IMPORTANTE:*\n`;
-  msg += `Solicitamos que a conferência dos produtos seja realizada no ato da entrega. Após a validação do recebimento, não realizamos trocas ou estornos. *NÃO ACEITAMOS DEVOLUÇÕES APÓS 7 DIAS DO RECEBIMENTO.*\n\n`;
-
-  msg += `📋 Esta cotação está sujeita a mudança de preços e encargos. *Válido por 5 dias.*\n\n`;
-
-  msg += `📜 _É de responsabilidade exclusiva do cliente a definição da embalagem adequada, incluindo aplicação específica, cumprimento regulamentar, compatibilidade, transporte, armazenagem e manipulação. A Nastripack se isenta de quaisquer garantias expressas ou implícitas._\n\n`;
-
-
+  // ── RODAPÉ ──
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
   msg += `📦 *PRAZOS:*\n`;
-  msg += `• PRAZO PARA ENVIO: 2 A 3 DIAS APÓS A CONFIRMAÇÃO DE PAGAMENTO\n`;
+  msg += `• Envio: 2 a 3 dias após confirmação do pagamento\n`;
   msg += `• PIX: 20.070.429/0001-62\n`;
-  msg += `• PRAZO DE ENTREGA PELA TRANSPORTADORA COTADA: 6 A 8 DIAS ÚTEIS\n\n`;
-  msg += `⚠️ *IMPORTANTE:*\n`;
-  msg += `Solicitamos que a conferência dos produtos seja realizada no ato da entrega. Após a validação do recebimento e a conferência do material, não realizamos trocas ou estornos. Caso seja identificada qualquer divergência, avaria ou irregularidade no momento da entrega, pedimos que nos comunique imediatamente para providenciarmos a devida substituição conforme os padrões de qualidade Nastripack. *NÃO ACEITAMOS DEVOLUÇÕES APÓS 7 DIAS DO RECEBIMENTO DO MATERIAL.*\n\n`;
-  msg += `📋 Esta é uma cotação referente às mercadorias acima citadas e está sujeita a mudança de preços e encargos. *Válido por 5 dias.*\n\n`;
-  msg += `📜 _"É de responsabilidade exclusiva do cliente a definição da embalagem adequada, incluindo a sua aplicação específica, cumprimento regulamentar das normas e legislações aplicáveis, compatibilidade, transporte, armazenagem, manipulação e requisitos do produto. Mediante ao exposto, a Nastripack se isenta de quaisquer garantias, sejam elas expressas ou implícitas."_\n\n`;
-  if(obs) msg += `📝 *Observações:* ${obs}\n\n`;
+  msg += `• Entrega pela transportadora: 6 a 8 dias úteis\n\n`;
+  msg += `⚠️ Solicitamos que a conferência dos produtos seja realizada no ato da entrega. Após a validação do recebimento, não realizamos trocas ou estornos. Caso seja identificada qualquer divergência, pedimos que nos comunique imediatamente. *NÃO ACEITAMOS DEVOLUÇÕES APÓS 7 DIAS DO RECEBIMENTO.*\n\n`;
+  msg += `📋 Esta cotação está sujeita a mudança de preços e encargos. *Válido por 5 dias.*\n\n`;
+  msg += `📜 _"É de responsabilidade exclusiva do cliente a definição da embalagem adequada, incluindo aplicação específica, cumprimento regulamentar, compatibilidade, transporte, armazenagem e manipulação. A Nastripack se isenta de quaisquer garantias expressas ou implícitas."_\n\n`;
   msg += `_Agradecemos a preferência!_\n`;
   msg += `_São Bernardo do Campo, ${hoje}_\n`;
   msg += `_Nastripack Embalagens Industriais_`;
@@ -2360,8 +2356,8 @@ async function enviarEmail(){
   const emailCliente = modalidade==='entrega' ? g('frete-cli-email') : g('cli-email');
   const nomeCliente  = modalidade==='entrega' ? g('frete-cli-nome')  : g('cli-nome');
 
-  if(!nomeCliente){ showToast('⚠️ Preencha o Nome do cliente','error'); showTab('cliente'); return; }
-  if(!emailCliente){ showToast('⚠️ Preencha o E-mail do cliente','error'); showTab('cliente'); return; }
+  if(!nomeCliente){ showToast('⚠️ Preencha o Nome','error'); showTab('cliente'); return; }
+  if(!emailCliente){ showToast('⚠️ Preencha o E-mail','error'); showTab('cliente'); return; }
 
   const cnpj    = g('cli-cnpj'), cpf = g('cli-cpf');
   const tipoPJ  = document.getElementById('btn-pj').classList.contains('active');
@@ -2378,12 +2374,11 @@ async function enviarEmail(){
   const prazoEl = status==='cif' ? document.getElementById('prazo-entrega') : document.getElementById('prazo-entrega-2');
   const prazoV  = prazoEl?.value || 'A confirmar';
   const modFrete= modalidade==='entrega' ? (status==='cif' ? 'CIF' : 'FOB') : 'RETIRADA';
-
   const endCliente = modalidade==='entrega'
     ? `${end.endereco}, ${end.numero}${end.bairro?', '+end.bairro:''}, ${end.cidade}/${end.estado}, CEP: ${end.cep}`
     : 'Rua das Laranjeiras, 407, Parque Terra Nova, SBC/SP, CEP 09820-480';
 
-  const itens = cotacao.map((i,idx) => {
+  const itens = cotacao.map((i) => {
     const pu = i.preco > 0 ? fmtMoeda(i.preco) : 'a definir';
     const pt = i.preco > 0 ? fmtMoeda(i.qty*i.preco) : 'a definir';
     return `${i.qty}x  ${toTitleCase(i.nome)}  |  Unit: ${pu}  |  Total: ${pt}`;
@@ -2410,14 +2405,15 @@ async function enviarEmail(){
       email_cliente: emailCliente,
       endereco_cli:  endCliente,
       data:          hoje,
-      pagamento:     pgto || 'A definir',
-      entrega:       modFrete,
-      prazo:         prazoV,
       itens:         itens,
+      observacoes:   obs || '',
       subtotal:      fmtMoeda(sub),
       frete:         freteTexto,
       total:         fmtMoeda(total),
-      observacoes:   obs || 'Nenhuma',
+      ncm:           '39249000',
+      pagamento:     pgto || 'A definir',
+      entrega:       modFrete,
+      prazo:         prazoV,
       reply_to:      emailCliente,
     });
 
