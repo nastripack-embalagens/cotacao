@@ -1118,26 +1118,21 @@ body::after{
 
 /* BOTÃO FLUTUANTE IR PARA CADASTRO */
 .btn-ir-cadastro-wrap{
-  position:sticky;
-  bottom:16px;
-  z-index:30;
-  margin-top:16px;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  padding:0 16px;
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  z-index:100;
   animation:fadeUp .4s cubic-bezier(.34,1.56,.64,1);
 }
 .btn-ir-cadastro{
-  width:100%;
-  max-width:648px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border:none;cursor:pointer;
-  border-radius:var(--radius);font-family:'Plus Jakarta Sans',sans-serif;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;border:none;cursor:pointer;
+  border-radius:30px;font-family:'Plus Jakarta Sans',sans-serif;
   background:linear-gradient(135deg,#16a34a,#15803d);
-  box-shadow:0 8px 32px rgba(22,163,74,0.5),0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow:0 6px 24px rgba(22,163,74,0.55),0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2);
   transition:all .3s cubic-bezier(.34,1.56,.64,1);
   position:relative;overflow:hidden;
+  white-space:nowrap;
 }
 .btn-ir-cadastro::before{
   content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
@@ -1145,30 +1140,30 @@ body::after{
   transition:left .6s;
 }
 .btn-ir-cadastro:hover{
-  transform:translateY(-3px);
-  box-shadow:0 16px 48px rgba(22,163,74,0.6),0 4px 16px rgba(0,0,0,0.4);
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 12px 32px rgba(22,163,74,0.65),0 4px 16px rgba(0,0,0,0.4);
 }
 .btn-ir-cadastro:hover::before{left:100%}
-.btn-ir-cadastro:active{transform:translateY(-1px)}
+.btn-ir-cadastro:active{transform:translateY(-1px) scale(1)}
 .btn-ir-cadastro-left{
-  display:flex;align-items:center;gap:14px;
+  display:flex;align-items:center;gap:8px;
 }
 .btn-ir-cadastro-texto{
-  display:flex;flex-direction:column;gap:2px;text-align:left;
+  display:flex;flex-direction:column;gap:1px;text-align:left;
 }
 .btn-ir-cadastro-texto strong{
-  font-size:14px;font-weight:800;color:#fff;display:block;
+  font-size:12px;font-weight:800;color:#fff;display:block;line-height:1.3;
 }
 .btn-ir-cadastro-texto small{
-  font-size:11px;color:rgba(255,255,255,0.8);display:block;font-weight:500;
+  font-size:10px;color:rgba(255,255,255,0.75);display:block;font-weight:500;
 }
-.btn-ir-cadastro .lc{stroke:#fff}
+.btn-ir-cadastro .lc{stroke:#fff;width:16px;height:16px}
 
 @media(max-width:480px){
-  .btn-ir-cadastro-wrap{padding:0 12px;bottom:12px}
-  .btn-ir-cadastro{padding:14px 16px}
-  .btn-ir-cadastro-texto strong{font-size:13px}
-  .btn-ir-cadastro-texto small{font-size:10px}
+  .btn-ir-cadastro-wrap{bottom:16px;right:16px}
+  .btn-ir-cadastro{padding:10px 14px;gap:8px}
+  .btn-ir-cadastro-texto strong{font-size:11px}
+  .btn-ir-cadastro-texto small{display:none}
 }
 
 /* BOTÃO FINALIZAR COTAÇÃO */
@@ -1379,22 +1374,21 @@ body::after{
 
   <div id="contagem" class="contagem"></div>
   <div id="lista-produtos"></div>
-
-  <!-- BOTÃO FLUTUANTE — aparece ao adicionar produto -->
-  <div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
-    <button class="btn-ir-cadastro" onclick="showTab('cliente')">
-      <span class="btn-ir-cadastro-left">
-        <i data-lucide="user" class="lc lc-lg"></i>
-        <span class="btn-ir-cadastro-texto">
-          <strong>Preencher dados do cliente</strong>
-          <small id="ir-cadastro-count">0 produto(s) selecionado(s)</small>
-        </span>
-      </span>
-      <i data-lucide="arrow-right" class="lc lc-lg"></i>
-    </button>
-  </div>
-
 </section>
+
+<!-- BOTÃO FLUTUANTE FIXO -->
+<div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
+  <button class="btn-ir-cadastro" onclick="showTab('cliente')">
+    <span class="btn-ir-cadastro-left">
+      <i data-lucide="user" class="lc"></i>
+      <span class="btn-ir-cadastro-texto">
+        <strong>Preencher dados</strong>
+        <small id="ir-cadastro-count">0 produto(s)</small>
+      </span>
+    </span>
+    <i data-lucide="arrow-right" class="lc"></i>
+  </button>
+</div>
 
 <!-- BOTÃO FLUTUANTE IR PARA CADASTRO -->
 <div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
@@ -1583,7 +1577,6 @@ body::after{
       </div>
     </div>
 
-    <button class="btn-block btn-wpp" onclick="gerarWhatsApp()"><i data-lucide="message-circle" class="lc lc-md"></i> Gerar mensagem para WhatsApp</button>
     <button class="btn-block btn-email" onclick="enviarEmail()" id="btn-email"><i data-lucide="mail" class="lc lc-md"></i> Enviar cotação por E-mail</button>
     <button class="btn-block btn-limpar" onclick="limparCotacao()"><i data-lucide="trash-2" class="lc lc-md"></i> Limpar cotação</button>
   </div>
