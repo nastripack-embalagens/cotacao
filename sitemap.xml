@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- PÁGINA PRINCIPAL — COTAÇÃO ONLINE -->
+  <url>
+    <loc>https://cotacao.nastripack.com.br/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://i.postimg.cc/qR5WWVWp/logo.png</image:loc>
+      <image:title>Nastripack Embalagens Industriais — Cotação B2B Online</image:title>
+      <image:caption>Distribuidora de potes, baldes e bombonas plásticos para todo o Brasil</image:caption>
+    </image:image>
+  </url>
+
+  <!-- SITE INSTITUCIONAL -->
+  <url>
+    <loc>https://www.nastripack.com.br/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
