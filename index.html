@@ -960,6 +960,38 @@ body::after{
 }
 /* ========================= */
 
+/* Badge CIF Modalidade do Frete */
+.frete-cif-badge{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(37,99,235,.22) 0%,rgba(59,130,246,.12) 100%);
+  border:1px solid rgba(96,165,250,.55);
+  box-shadow:
+    0 0 0 1px rgba(96,165,250,.15),
+    0 0 18px rgba(59,130,246,.3),
+    0 0 40px rgba(59,130,246,.12),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom:14px;
+}
+.frete-cif-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;min-width:38px;
+  background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);
+  border-radius:9px;
+  filter:drop-shadow(0 0 8px rgba(96,165,250,.5));
+}
+.frete-cif-icon svg{width:20px;height:20px;stroke:#60a5fa;stroke-width:1.8}
+.frete-cif-text strong{
+  display:block;font-size:13px;font-weight:800;color:#e2e8f0;
+  text-shadow:0 0 10px rgba(147,197,253,.5);letter-spacing:.3px;
+}
+.frete-cif-text small{
+  display:block;font-size:10px;font-weight:600;letter-spacing:.6px;
+  color:rgba(147,197,253,.8);margin-top:2px;text-transform:uppercase;
+  text-shadow:0 0 8px rgba(147,197,253,.4);
+}
+/* ========================= */
+
 /* clicável na imagem e título */
 .prod-img-wrap.clickable,.produto-nome.clickable{cursor:pointer;}
 .prod-img-wrap.clickable:hover .prod-img{transform:scale(1.08);box-shadow:0 0 0 2px rgba(96,165,250,.5)}
@@ -1068,26 +1100,76 @@ body::after{
 
 /* ENTREGA TOGGLE */
 .frete-toggle{
-  display:flex;margin-bottom:14px;
-  border:1px solid var(--border);border-radius:var(--radius);
-  overflow:hidden;
-  background:linear-gradient(135deg,var(--bg-card) 0%,var(--bg-card-light) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+  display:flex;gap:10px;margin-bottom:14px;
+  background:transparent;border:none;overflow:visible;
 }
 .frete-opt{
-  flex:1;padding:14px 8px;text-align:center;cursor:pointer;
-  font-size:11px;font-weight:700;color:var(--text-muted);
-  background:transparent;border:none;transition:all .25s;
-  font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.6px;
+  flex:1;padding:14px 12px;text-align:center;cursor:pointer;
+  font-size:11px;font-weight:800;letter-spacing:.8px;
   text-transform:uppercase;position:relative;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(96,165,250,.15);
+  border-radius:12px;
+  color:rgba(148,163,184,.7);
+  transition:all .25s ease;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
 }
-.frete-opt:first-child{border-right:1px solid var(--border)}
+.frete-opt:first-child{border-right:none}
 .frete-opt.active{
-  background:var(--gradient-blue-soft);color:#fff;
-  box-shadow:inset 0 0 20px rgba(255,255,255,.05),0 4px 16px rgba(37,99,235,.25);
+  background:linear-gradient(135deg,rgba(37,99,235,.25) 0%,rgba(59,130,246,.15) 100%);
+  border:1px solid rgba(96,165,250,.55);
+  color:#e2e8f0;
+  box-shadow:
+    0 0 0 1px rgba(96,165,250,.2),
+    0 0 18px rgba(59,130,246,.35),
+    0 0 40px rgba(59,130,246,.15),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  text-shadow: 0 0 12px rgba(147,197,253,.6);
 }
-.frete-opt:hover:not(.active){background:var(--bg-hover);color:var(--text-soft)}
-.frete-opt-icon{font-size:18px;display:block;margin-bottom:5px}
+/* Botão FOB (retirada) ativo — verde */
+#opt-retirada.active{
+  background:linear-gradient(135deg,rgba(16,185,129,.22) 0%,rgba(5,150,105,.12) 100%);
+  border:1px solid rgba(52,211,153,.55);
+  color:#e2e8f0;
+  box-shadow:
+    0 0 0 1px rgba(52,211,153,.2),
+    0 0 18px rgba(16,185,129,.35),
+    0 0 40px rgba(16,185,129,.15),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  text-shadow:0 0 12px rgba(110,231,183,.6);
+}
+#opt-retirada.active .frete-opt-icon{
+  filter:drop-shadow(0 0 10px rgba(110,231,183,.8));
+}
+#opt-retirada.active small{
+  color:rgba(110,231,183,.9);
+  text-shadow:0 0 8px rgba(110,231,183,.7);
+}
+.frete-opt:hover:not(.active){
+  background:rgba(255,255,255,.07);
+  border-color:rgba(96,165,250,.3);
+  color:#94a3b8;
+  box-shadow:0 0 10px rgba(59,130,246,.15);
+}
+.frete-opt-icon{
+  font-size:20px;display:block;margin-bottom:6px;
+  filter:drop-shadow(0 0 6px rgba(96,165,250,.5));
+}
+.frete-opt.active .frete-opt-icon{
+  filter:drop-shadow(0 0 10px rgba(147,197,253,.8));
+}
+.frete-opt small{
+  display:block;
+  font-size:9px;font-weight:600;letter-spacing:1px;
+  opacity:.75;margin-top:3px;
+  text-transform:uppercase;
+  color:rgba(147,197,253,.8);
+}
+.frete-opt.active small{
+  opacity:1;
+  text-shadow:0 0 8px rgba(147,197,253,.7);
+}
 
 /* RETIRADA MSG */
 .retirada-msg{
@@ -1752,10 +1834,14 @@ body::after{
     <div class="section-title">Modalidade de entrega</div>
     <div class="frete-toggle">
       <button class="frete-opt active" id="opt-retirada" onclick="setModalidade('retirada')">
-        <span class="frete-opt-icon"><i data-lucide="warehouse" class="lc lc-lg"></i></span>Retirar na loja
+        <span class="frete-opt-icon"><i data-lucide="warehouse" class="lc lc-lg"></i></span>
+        Vou coletar o pedido
+        <small>Frete FOB</small>
       </button>
       <button class="frete-opt" id="opt-entrega" onclick="setModalidade('entrega')">
-        <span class="frete-opt-icon"><i data-lucide="truck" class="lc lc-lg"></i></span>Envio com frete
+        <span class="frete-opt-icon"><i data-lucide="truck" class="lc lc-lg"></i></span>
+        A Nastripack vai enviar o pedido
+        <small>Frete CIF</small>
       </button>
     </div>
 
@@ -1768,7 +1854,7 @@ body::after{
           Parque Terra Nova · São Bernardo do Campo - SP<br>
           CEP: 09820-480
         </span>
-        <span style="font-size:11px;opacity:.6;display:block;margin-top:8px">Frete não incluso na cotação.</span>
+        <span style="font-size:11px;opacity:.8;display:block;margin-top:8px">O custo do frete será embutido no valor unitário do produto.</span>
       </div>
     </div>
 
@@ -1776,7 +1862,7 @@ body::after{
       <div class="frete-box">
         <div class="frete-dica">
           <span><i data-lucide="info" class="lc lc-md lc-blue"></i></span>
-          <span>A consulta será realizada internamente com os nossos parceiros logísticos.</span>
+          <span>O custo do frete será embutido no valor unitário do produto.</span>
         </div>
 
         <!-- DADOS DO CLIENTE inline na cotação -->
@@ -1840,28 +1926,15 @@ body::after{
 
         <!-- MODALIDADE DO FRETE -->
         <div class="section-title">Modalidade do frete</div>
-        <div class="frete-status-opts">
-          <label class="frete-radio">
-            <input type="radio" name="frete-status" value="cif" checked onchange="onFreteStatusChange(this.value)">
-            <span class="frete-radio-box">
-              <span class="frete-radio-icon"><i data-lucide="star" class="lc lc-lg lc-yellow"></i></span>
-              <span class="frete-radio-text">
-                <strong>MELHOR FRETE/PACK GARANTIDO</strong>
-                <small>Vamos pesquisar com os nossos parceiros os melhores preços com as melhores ofertas</small>
-                <small style="margin-top:4px;display:block;opacity:.75">O custo do envio é por conta do cliente</small>
-              </span>
-            </span>
-          </label>
-          <label class="frete-radio">
-            <input type="radio" name="frete-status" value="fob" onchange="onFreteStatusChange(this.value)">
-            <span class="frete-radio-box">
-              <span class="frete-radio-icon"><i data-lucide="user" class="lc lc-lg"></i></span>
-              <span class="frete-radio-text">
-                <strong>Frete FOB</strong>
-                <small>O custo do envio é por conta do cliente</small>
-              </span>
-            </span>
-          </label>
+        <!-- Radio CIF oculto sempre marcado (mantém lógica JS intacta) -->
+        <input type="radio" name="frete-status" value="cif" checked onchange="onFreteStatusChange(this.value)" style="display:none">
+        <input type="radio" name="frete-status" value="fob" onchange="onFreteStatusChange(this.value)" style="display:none">
+        <div class="frete-cif-badge">
+          <span class="frete-cif-icon"><i data-lucide="truck" class="lc lc-lg"></i></span>
+          <span class="frete-cif-text">
+            <strong>Melhor Custo Frete/Pack</strong>
+            <small>Frete CIF — A Nastripack vai enviar o pedido</small>
+          </span>
         </div>
 
         <div id="box-valor-frete" style="display:none;margin-top:14px">
@@ -2239,7 +2312,7 @@ function atualizarTotais(){
   const lf=document.getElementById('linha-frete');
   if(status==='cif'&&freteVal>0){
     lf.style.display='flex';
-    document.getElementById('label-frete').textContent='MELHOR FRETE/PACK GARANTIDO';
+    document.getElementById('label-frete').textContent='A Nastripack vai enviar o pedido';
     document.getElementById('sub-frete').textContent=fmtMoeda(freteVal);
   }else if(status==='cif'&&modalidade==='entrega'){
     lf.style.display='flex';
@@ -2247,7 +2320,7 @@ function atualizarTotais(){
     document.getElementById('sub-frete').textContent='A confirmar';
   }else if(status==='fob'&&modalidade==='entrega'){
     lf.style.display='flex';
-    document.getElementById('label-frete').textContent='Frete FOB';
+    document.getElementById('label-frete').textContent='Vou coletar o pedido (Frete FOB)';
     document.getElementById('sub-frete').textContent='Por conta do cliente';
   }else{
     lf.style.display='none';
@@ -2650,16 +2723,16 @@ function gerarWhatsApp(){
   // ── TOTAIS ──
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
   msg += `IPI: 0% A INCLUIR | ICMS: INCLUSO\n`;
-  if(modalidade==='entrega' && status==='cif' && freteVal>0) msg += `Frete CIF: ${fmtMoeda(freteVal)}\n`;
-  if(modalidade==='entrega' && status==='cif' && freteVal===0) msg += `Frete CIF: A confirmar com parceiros logísticos\n`;
-  if(modalidade==='entrega' && status==='fob') msg += `Frete FOB: Por conta do cliente\n`;
-  if(modalidade==='retirada') msg += `Retirada: Na loja em SBC/SP\n`;
+  if(modalidade==='entrega' && status==='cif' && freteVal>0) msg += `Modalidade: A Nastripack vai enviar o pedido (Frete CIF): ${fmtMoeda(freteVal)}\n`;
+  if(modalidade==='entrega' && status==='cif' && freteVal===0) msg += `Modalidade: A Nastripack vai enviar o pedido (Frete CIF) — custo embutido no valor unitário\n`;
+  if(modalidade==='entrega' && status==='fob') msg += `Modalidade: Vou coletar o pedido (Frete FOB) — custo embutido no valor unitário\n`;
+  if(modalidade==='retirada') msg += `Modalidade: Vou coletar o pedido (Frete FOB) — custo embutido no valor unitário\n`;
   msg += `*TOTAL: ${fmtMoeda(total)}*\n\n`;
 
   // ── NCM | PAGAMENTO | ENTREGA ──
   msg += `*NCM:* 39249000  |  *IPI:* 0%  |  *ICMS:* Incluso\n`;
   msg += `*PAGAMENTO:* ${pgto || 'A definir'}\n`;
-  msg += `*ENTREGA:* ${modFrete}  |  *PRAZO:* ${prazoV}\n\n`;
+  msg += `*MODALIDADE:* ${modFrete==='CIF' ? 'A Nastripack vai enviar o pedido (Frete CIF)' : modFrete==='FOB' ? 'Vou coletar o pedido (Frete FOB)' : 'Retirada na loja'}  |  *PRAZO:* ${prazoV}\n\n`;
 
   // ── RODAPÉ ──
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
@@ -2743,8 +2816,8 @@ async function enviarEmail(){
   }).join('\n');
 
   const freteTexto = modalidade==='entrega'
-    ? (status==='cif' ? (freteVal>0 ? `CIF: ${fmtMoeda(freteVal)}` : 'CIF — A confirmar com parceiros') : 'FOB — Por conta do cliente')
-    : 'Retirada na loja em SBC/SP';
+    ? (status==='cif' ? (freteVal>0 ? `A Nastripack vai enviar o pedido (Frete CIF): ${fmtMoeda(freteVal)}` : 'A Nastripack vai enviar o pedido (Frete CIF) — custo embutido no valor unitário') : 'Vou coletar o pedido (Frete FOB) — custo embutido no valor unitário')
+    : 'Vou coletar o pedido (Frete FOB) — custo embutido no valor unitário';
 
   const btn = document.getElementById('btn-email');
   btn.disabled = true;
@@ -2770,7 +2843,7 @@ async function enviarEmail(){
       total:         fmtMoeda(total),
       ncm:           '39249000',
       pagamento:     pgto || 'A definir',
-      entrega:       modFrete,
+      entrega:       modFrete==='CIF' ? 'A Nastripack vai enviar o pedido (Frete CIF)' : modFrete==='FOB' ? 'Vou coletar o pedido (Frete FOB)' : 'Vou coletar o pedido (Frete FOB)',
       prazo:         prazoV,
       reply_to:      emailCliente,
     });
