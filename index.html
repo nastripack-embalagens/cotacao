@@ -2848,7 +2848,27 @@ async function enviarEmail(){
       reply_to:      emailCliente,
     });
 
-    showToast('✅ Cotação enviada por e-mail!', 'success');
+    // Enviar lead para o CRM Nastripack (não crítico — erro não bloqueia o fluxo)
+    try {
+      const crmPayload = {
+        name:     nomeCliente,
+        email:    emailCliente,
+        phone:    docVal ? `${docLabel}: ${docVal}` : null,
+        product:  itens,
+        quantity: cotacao.reduce((a, i) => a + i.qty, 0),
+        message:  obs || null,
+        source:   'formulario-cotacao',
+      };
+      fetch('https://nastripack-crm.andrenastri.workers.dev/api/webhook/lead', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Webhook-Secret': '7bdfdce6ed87cbfd6326c12d0685de3338760769' },
+        body:    JSON.stringify(crmPayload),
+      }).catch(e => console.warn('CRM webhook:', e));
+    } catch(crmErr) {
+      console.warn('CRM webhook erro:', crmErr);
+    }
+
+    showToast('\u2705 Cotação enviada por e-mail!', 'success');
     btn.innerHTML = '<i data-lucide="check-circle" class="lc lc-md"></i> E-mail enviado!';
     lucide.createIcons();
     setTimeout(() => {
