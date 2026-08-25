@@ -1485,107 +1485,49 @@ body::after{
   animation:pulseDot 1s ease-in-out infinite;
 }
 
-/* BOTÃO FLUTUANTE IR PARA CADASTRO */
-.btn-ir-cadastro-wrap{
-  position:fixed;
-  bottom:24px;left:50%;
-  transform:translateX(-50%);
-  z-index:200;
-  width:calc(100% - 32px);
-  max-width:648px;
-  animation:slideUpBtn .4s cubic-bezier(.34,1.56,.64,1);
+/* ── Mini Carrinho Flutuante ── */
+#cart-widget{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;align-items:flex-end;gap:12px;}
+@keyframes cartSlideUp{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.cart-panel{background:#13161e;border:1px solid rgba(255,255,255,.08);border-radius:18px;width:310px;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.7),0 4px 16px rgba(0,0,0,.4);animation:cartSlideUp .35s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
+.cart-panel-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px 12px;border-bottom:1px solid rgba(255,255,255,.06);}
+.cart-panel-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.3px;}
+.cart-panel-title svg{width:18px;height:18px;stroke:var(--green);fill:none;}
+.cart-panel-close{width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:var(--text-muted);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;font-family:sans-serif;padding:0;}
+.cart-panel-close:hover{background:rgba(255,255,255,.15);color:#fff;}
+.cart-items-list{overflow-y:auto;padding:10px 18px;display:flex;flex-direction:column;gap:0;max-height:240px;}
+.cart-items-list::-webkit-scrollbar{width:4px}
+.cart-items-list::-webkit-scrollbar-track{background:transparent}
+.cart-items-list::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:4px}
+.cart-item-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cart-item-row:last-child{border-bottom:none;}
+.cart-item-nome{flex:1;font-size:13px;font-weight:600;color:var(--text-soft);font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cart-item-qty{background:var(--blue-bg-strong);color:var(--blue-bright);font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.cart-panel-footer{padding:12px 18px 16px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:10px;}
+.cart-summary{font-size:12px;color:var(--text-muted);font-family:'Plus Jakarta Sans',sans-serif;text-align:center;font-weight:500;}
+.btn-finalizar-cart{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border:none;cursor:pointer;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,#16a34a,#15803d);box-shadow:0 6px 20px rgba(22,163,74,.45);transition:transform .2s,box-shadow .2s;letter-spacing:-.2px;position:relative;overflow:hidden;}
+.btn-finalizar-cart::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transition:left .5s;}
+.btn-finalizar-cart:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(22,163,74,.6);}
+.btn-finalizar-cart:hover::before{left:100%;}
+.btn-finalizar-cart svg{stroke:#fff;width:16px;height:16px;fill:none;flex-shrink:0;}
+.btn-ajuda-wpp{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--blue);text-decoration:none;transition:opacity .2s,transform .2s;letter-spacing:-.1px;}
+.btn-ajuda-wpp:hover{opacity:.88;transform:translateY(-1px);}
+.cart-fab{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#15803d);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(22,163,74,.55),0 2px 8px rgba(0,0,0,.4);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;position:relative;}
+.cart-fab:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(22,163,74,.7);}
+.cart-fab svg{stroke:#fff;width:24px;height:24px;fill:none;}
+.cart-fab-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;font-family:'Plus Jakarta Sans',sans-serif;border:2px solid #0F1115;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+@keyframes cartWiggle{
+  0%,100%{transform:scale(1) rotate(0deg);box-shadow:0 6px 24px rgba(22,163,74,.55),0 2px 8px rgba(0,0,0,.4)}
+  10%{transform:scale(1.12) rotate(-8deg)}
+  20%{transform:scale(1.12) rotate(8deg)}
+  30%{transform:scale(1.08) rotate(-6deg)}
+  40%{transform:scale(1.08) rotate(6deg)}
+  50%{transform:scale(1.05) rotate(-3deg)}
+  60%{transform:scale(1.05) rotate(3deg)}
+  70%{transform:scale(1.02) rotate(0deg)}
+  80%,90%{transform:scale(1.15);box-shadow:0 8px 32px rgba(22,163,74,.8),0 0 0 8px rgba(22,163,74,.15)}
 }
-@keyframes slideUpBtn{
-  from{opacity:0;transform:translateX(-50%) translateY(20px)}
-  to{opacity:1;transform:translateX(-50%) translateY(0)}
-}
-.btn-ir-cadastro{
-  width:100%;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;
-  border:none;cursor:pointer;
-  border-radius:var(--radius);
-  font-family:'Plus Jakarta Sans',sans-serif;
-  background:var(--gradient-blue);
-  box-shadow:0 8px 32px rgba(37,99,235,0.55),0 2px 8px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  position:relative;overflow:hidden;
-}
-.btn-ir-cadastro::before{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-  animation:shimmerBtn 2.5s infinite;
-}
-@keyframes shimmerBtn{
-  0%{left:-100%}100%{left:200%}
-}
-.btn-ir-cadastro:hover{
-  transform:translateY(-3px);
-  box-shadow:0 16px 48px rgba(37,99,235,0.7),inset 0 1px 0 rgba(255,255,255,.25);
-}
-.btn-ir-cadastro:active{transform:translateY(-1px)}
-.btn-ir-cadastro-left{
-  display:flex;align-items:center;gap:14px;
-}
-.btn-ir-cadastro-texto{
-  display:flex;flex-direction:column;gap:2px;text-align:left;
-}
-.btn-ir-cadastro-texto strong{
-  font-size:15px;font-weight:800;color:#fff;letter-spacing:-.2px;
-}
-.btn-ir-cadastro-texto small{
-  font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;
-}
-
-/* BOTÃO FLUTUANTE IR PARA CADASTRO */
-.btn-ir-cadastro-wrap{
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  z-index:100;
-  animation:fadeUp .4s cubic-bezier(.34,1.56,.64,1);
-}
-.btn-ir-cadastro{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 18px;border:none;cursor:pointer;
-  border-radius:30px;font-family:'Plus Jakarta Sans',sans-serif;
-  background:linear-gradient(135deg,#16a34a,#15803d);
-  box-shadow:0 6px 24px rgba(22,163,74,0.55),0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2);
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  position:relative;overflow:hidden;
-  white-space:nowrap;
-}
-.btn-ir-cadastro::before{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-  transition:left .6s;
-}
-.btn-ir-cadastro:hover{
-  transform:translateY(-3px) scale(1.03);
-  box-shadow:0 12px 32px rgba(22,163,74,0.65),0 4px 16px rgba(0,0,0,0.4);
-}
-.btn-ir-cadastro:hover::before{left:100%}
-.btn-ir-cadastro:active{transform:translateY(-1px) scale(1)}
-.btn-ir-cadastro-left{
-  display:flex;align-items:center;gap:8px;
-}
-.btn-ir-cadastro-texto{
-  display:flex;flex-direction:column;gap:1px;text-align:left;
-}
-.btn-ir-cadastro-texto strong{
-  font-size:12px;font-weight:800;color:#fff;display:block;line-height:1.3;
-}
-.btn-ir-cadastro-texto small{
-  font-size:10px;color:rgba(255,255,255,0.75);display:block;font-weight:500;
-}
-.btn-ir-cadastro .lc{stroke:#fff;width:16px;height:16px}
-
-@media(max-width:480px){
-  .btn-ir-cadastro-wrap{bottom:16px;right:16px}
-  .btn-ir-cadastro{padding:10px 14px;gap:8px}
-  .btn-ir-cadastro-texto strong{font-size:11px}
-  .btn-ir-cadastro-texto small{display:none}
-}
+.cart-fab--attention{animation:cartWiggle 1.2s ease-in-out infinite!important;}
+@media(max-width:480px){#cart-widget{bottom:16px;right:16px}.cart-panel{width:calc(100vw - 32px)}}
 
 /* BOTÃO FINALIZAR COTAÇÃO */
 .btn-finalizar-wrap{
@@ -1666,6 +1608,57 @@ body::after{
   .produto-card{padding:14px}
   .prod-img,.prod-img-placeholder{width:56px;height:56px}
   .row-2{flex-direction:column;gap:10px}
+  /* tabs */
+  .tab-btn{font-size:9px;padding:9px 4px;letter-spacing:.3px}
+  /* produto card */
+  .prod-top{gap:10px}
+  .produto-nome{font-size:13px}
+  .qty-row{flex-wrap:wrap;gap:6px}
+  .qty-label{flex:1 1 100%;margin-bottom:2px}
+  /* frete toggle — empilhar verticalmente */
+  .frete-toggle{flex-direction:column;gap:8px}
+  .frete-opt:first-child{border-right:1px solid rgba(96,165,250,.15)}
+  /* cotação resumo — itens */
+  .cotacao-item{flex-wrap:wrap;gap:6px}
+  .cotacao-item-qty{flex-shrink:0}
+  /* campos */
+  .campo input,.campo select,.campo textarea{font-size:14px}
+  .section-title{font-size:12px}
+  /* cart panel maior no mobile */
+  .cart-panel{width:calc(100vw - 24px)}
+  #cart-widget{right:12px;bottom:14px}
+  /* botões de ação */
+  .btn-email{font-size:12px}
+}
+
+/* ── TABLET RESPONSIVE (max-width: 768px) ── */
+@media(max-width:768px){
+  /* header */
+  .header{padding:0 18px;height:90px}
+  .logo-img{height:58px}
+  .header-badge{font-size:10px;padding:5px 11px;letter-spacing:1px}
+  /* tabs */
+  .tabs-wrapper{top:90px;padding:12px 14px 10px}
+  .tabs-nav{max-width:100%}
+  .tab-btn{font-size:10px;padding:10px 6px;letter-spacing:.4px}
+  /* body */
+  .body{padding:18px 14px 36px;max-width:100%}
+  /* produto card */
+  .produto-card{padding:15px}
+  .prod-img,.prod-img-placeholder{width:60px;height:60px}
+  /* row-2: keep side-by-side but reduce gap */
+  .row-2{gap:8px}
+  /* frete toggle */
+  .frete-opt{padding:12px 10px;font-size:10px}
+  /* campos */
+  .campo input,.campo select,.campo textarea{font-size:14px}
+  /* cotação header */
+  .section-title{font-size:13px}
+  /* qty */
+  .qty-stepper button{width:28px;height:34px}
+  .qty-input{width:40px;font-size:13px}
+  /* cart widget */
+  .cart-panel{width:290px}
 }
 </style>
 </head>
@@ -1797,33 +1790,36 @@ body::after{
   <div id="lista-produtos"></div>
 </section>
 
-<!-- BOTÃO FLUTUANTE FIXO -->
-<div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
-  <button class="btn-ir-cadastro" onclick="showTab('cliente')">
-    <span class="btn-ir-cadastro-left">
-      <i data-lucide="user" class="lc"></i>
-      <span class="btn-ir-cadastro-texto">
-        <strong>Preencher dados</strong>
-        <small id="ir-cadastro-count">0 produto(s)</small>
-      </span>
-    </span>
-    <i data-lucide="arrow-right" class="lc"></i>
+<!-- MINI CARRINHO FLUTUANTE -->
+<div id="cart-widget" style="display:none">
+  <div id="cart-panel" class="cart-panel" style="display:none">
+    <div class="cart-panel-header">
+      <div class="cart-panel-title">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Sua cotação
+      </div>
+      <button class="cart-panel-close" onclick="toggleCart()" title="Minimizar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg></button>
+    </div>
+    <div id="cart-items-list" class="cart-items-list"></div>
+    <div class="cart-panel-footer">
+      <div id="cart-summary" class="cart-summary"></div>
+      <button class="btn-finalizar-cart" onclick="finalizarCotacao()">
+        Finalizar cotação
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="https://wa.me/5511914134471" target="_blank" rel="noopener" class="btn-ajuda-wpp">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Precisa de Ajuda?
+      </a>
+    </div>
+  </div>
+  <button class="cart-fab" id="cart-fab" onclick="toggleCart()" title="Ver itens da cotação">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span class="cart-fab-badge" id="cart-badge">0</span>
   </button>
 </div>
 
-<!-- BOTÃO FLUTUANTE IR PARA CADASTRO -->
-<div id="btn-ir-cadastro-wrap" class="btn-ir-cadastro-wrap" style="display:none">
-  <button class="btn-ir-cadastro" onclick="showTab('cliente')">
-    <span class="btn-ir-cadastro-left">
-      <i data-lucide="user" class="lc lc-lg"></i>
-      <span class="btn-ir-cadastro-texto">
-        <strong>Preencher dados do cliente</strong>
-        <small id="badge-produtos-texto">0 produto(s) selecionado(s)</small>
-      </span>
-    </span>
-    <i data-lucide="arrow-right" class="lc lc-lg"></i>
-  </button>
-</div>
+
 
 <!-- COTAÇÃO -->
 <section id="tab-cotacao-body" style="display:none">
@@ -2261,17 +2257,20 @@ function atualizarBadge(){
   b.textContent=cotacao.length;
   b.style.display=cotacao.length?'inline-block':'none';
 
-  // Botão flutuante ir para cadastro
-  const wrap=document.getElementById('btn-ir-cadastro-wrap');
-  const count=document.getElementById('ir-cadastro-count');
+  // Mini carrinho flutuante
+  const widget=document.getElementById('cart-widget');
+  const badge=document.getElementById('cart-badge');
   if(cotacao.length>0){
-    wrap.style.display='block';
+    if(widget) widget.style.display='flex';
     const total=cotacao.reduce((a,i)=>a+i.qty,0);
-    if(count) count.textContent=`${cotacao.length} produto${cotacao.length>1?'s':''} · ${total} unidade${total>1?'s':''} selecionada${total>1?'s':''}`;
-    lucide.createIcons();
+    if(badge) badge.textContent=total;
+    if(cartOpen) renderCartItems();
   }else{
-    wrap.style.display='none';
+    if(widget) widget.style.display='none';
+    fecharCartPanel();
   }
+  salvarCarrinho();
+  resetarCartIdle();
 }
 
 function mostrarObsPgto(val){
@@ -2632,6 +2631,7 @@ function formatarCep(el) {
 function limparCotacao(){
   if(!confirm('Limpar toda a cotação?'))return;
   cotacao=[];atualizarBadge();renderCotacao();
+  try{localStorage.removeItem('nsp_cotacao');}catch(e){}
   ['frete-valor','transportadora','frete-cep','frete-cidade','frete-bairro','frete-endereco','frete-numero','frete-referencia','frete-cli-nome','frete-cli-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 
@@ -2751,11 +2751,88 @@ function gerarWhatsApp(){
     .then(() => showToast('✓ Copiado! Cole no WhatsApp','success'))
     .catch(() => prompt('Copie:', msg));
 }
+let cartOpen=false;
+let cartIdleTimer=null;
+
+function salvarCarrinho(){
+  try{localStorage.setItem('nsp_cotacao',JSON.stringify(cotacao));}catch(e){}
+}
+
+function restaurarCarrinho(){
+  try{
+    const saved=localStorage.getItem('nsp_cotacao');
+    if(saved){
+      const arr=JSON.parse(saved);
+      if(Array.isArray(arr)&&arr.length){
+        cotacao=arr;
+        atualizarBadge();
+        renderCotacao&&renderCotacao();
+        showToast('🛒 Cotação anterior restaurada','success');
+      }
+    }
+  }catch(e){}
+}
+
+function resetarCartIdle(){
+  const fab=document.getElementById('cart-fab');
+  if(fab) fab.classList.remove('cart-fab--attention');
+  clearTimeout(cartIdleTimer);
+  if(cotacao.length>0&&!cartOpen){
+    cartIdleTimer=setTimeout(()=>{
+      if(cotacao.length>0&&!cartOpen){
+        const fabEl=document.getElementById('cart-fab');
+        if(fabEl) fabEl.classList.add('cart-fab--attention');
+      }
+    },120000);
+  }
+}
+
+function toggleCart(){
+  cartOpen=!cartOpen;
+  const panel=document.getElementById('cart-panel');
+  if(!panel)return;
+  // remover animação de atenção ao clicar
+  const fab=document.getElementById('cart-fab');
+  if(fab) fab.classList.remove('cart-fab--attention');
+  clearTimeout(cartIdleTimer);
+  if(cartOpen){
+    renderCartItems();
+    panel.style.display='flex';
+    panel.style.flexDirection='column';
+  }else{
+    panel.style.display='none';
+  }
+}
+
+function fecharCartPanel(){
+  cartOpen=false;
+  const panel=document.getElementById('cart-panel');
+  if(panel) panel.style.display='none';
+}
+
+function renderCartItems(){
+  const list=document.getElementById('cart-items-list');
+  const summary=document.getElementById('cart-summary');
+  if(!list)return;
+  list.innerHTML=cotacao.map(i=>`
+    <div class="cart-item-row">
+      <span class="cart-item-nome">${toTitleCase(i.nome)}</span>
+      <span class="cart-item-qty">${i.qty} un.</span>
+    </div>`).join('');
+  const totalQty=cotacao.reduce((a,i)=>a+i.qty,0);
+  if(summary) summary.textContent=`${cotacao.length} produto${cotacao.length>1?'s':''} · ${totalQty} unidade${totalQty>1?'s':''} no total`;
+}
+
+function finalizarCotacao(){
+  fecharCartPanel();
+  showTab('cliente');
+}
+
 function showTab(tab){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   ['tab-produtos','tab-cliente-body','tab-cotacao-body'].forEach(id=>document.getElementById(id).style.display='none');
-  // Esconder botão flutuante ao sair de produtos
-  document.getElementById('btn-ir-cadastro-wrap').style.display='none';
+  // Fechar painel do carrinho ao trocar de aba
+  fecharCartPanel();
   const map={
     produtos:['tab-produtos',0],
     cliente: ['tab-cliente-body',1],
@@ -2794,6 +2871,7 @@ async function enviarEmail(){
   const tipoPJ  = document.getElementById('btn-pj').classList.contains('active');
   const docLabel= tipoPJ ? 'CNPJ' : 'CPF';
   const docVal  = tipoPJ ? cnpj : cpf;
+  if(!docVal){ showToast('⚠️ Preencha o ' + docLabel, 'error'); showTab('cliente'); return; }
   const pgto    = g('cli-pgto');
   const obs     = g('cli-obs');
   const end     = getEnderecoEntrega();
@@ -2958,6 +3036,7 @@ function adicionarDoModal(id){
 /* ========================= */
 
 renderProdutos();
+restaurarCarrinho();
 </script>
 <script>lucide.createIcons();</script>
 
