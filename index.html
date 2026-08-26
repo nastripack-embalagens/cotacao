@@ -3057,6 +3057,12 @@ async function enviarEmail(){
     }
 
     showToast('\u2705 Cotação enviada por e-mail!', 'success');
+    // Limpar carrinho e localStorage após envio bem-sucedido
+    cotacao = [];
+    atualizarBadge();
+    renderCotacao();
+    renderCartItems();
+    try { localStorage.removeItem('nsp_cotacao'); } catch(e) {}
     btn.innerHTML = '<i data-lucide="check-circle" class="lc lc-md"></i> E-mail enviado!';
     lucide.createIcons();
     setTimeout(() => {
