@@ -2231,8 +2231,8 @@ function renderProdutos(){
   if(!prods.length){lista.innerHTML='<div class="empty-search"><i data-lucide="search-x" class="lc" style="width:24px;height:24px;stroke:var(--text-muted)"></i> Nenhum produto encontrado</div>';return;}
   lista.innerHTML=prods.map((p,idx)=>{
     const nomeTitle=toTitleCase(p.nome);
-    const imgEl=p.imagem?`<img src="${p.imagem}" class="prod-img" alt="${nomeTitle}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' ;
-    const placeholder=`<div class="prod-img-placeholder" ${p.imagem?'style="display:none"':''}><i data-lucide="package" class="lc" style="width:28px;height:28px;stroke:var(--text-muted)"></i></div>`;
+    const imgEl=(p.imagens&&p.imagens[0])?`<img src="${p.imagens[0]}" class="prod-img" alt="${nomeTitle}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' ;
+    const placeholder=`<div class="prod-img-placeholder" ${(p.imagens&&p.imagens[0])?'style="display:none"':''}><i data-lucide="package" class="lc" style="width:28px;height:28px;stroke:var(--text-muted)"></i></div>`;
     const catIcon={Potes:'<i data-lucide="package-open" class="lc lc-sm"></i>',Baldes:'<i data-lucide="archive" class="lc lc-sm"></i>',Bombonas:'<i data-lucide="cylinder" class="lc lc-sm"></i>'}[p.cat]||'<i data-lucide="package" class="lc lc-sm"></i>';
     const hasModal = true;
     const clickAttr = hasModal ? `onclick="abrirModalProd(${p.id})" title="Ver detalhes do produto"` : '';
@@ -2274,7 +2274,7 @@ function adicionar(id){
   const qty=parseInt(document.getElementById(`qty-${id}`).value)||0;
   if(qty<=0)return;
   const ex=cotacao.find(i=>i.id===id);
-  if(ex){ex.qty=qty;}else cotacao.push({id,nome:p.nome,cat:p.cat,qty,preco:0,img:p.imagem||null});
+  if(ex){ex.qty=qty;}else cotacao.push({id,nome:p.nome,cat:p.cat,qty,preco:0,img:(p.imagens&&p.imagens[0])||null});
   document.getElementById(`qty-${id}`).value='';
   document.getElementById(`btn-${id}`).disabled=true;
   atualizarBadge();
