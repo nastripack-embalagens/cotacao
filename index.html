@@ -3041,13 +3041,21 @@ async function enviarEmail(){
     // Enviar lead para o CRM Nastripack (não crítico — erro não bloqueia o fluxo)
     try {
       const crmPayload = {
-        name:     nomeCliente,
-        email:    emailCliente,
-        phone:    docVal ? `${docLabel}: ${docVal}` : null,
-        product:  itens,
-        quantity: cotacao.reduce((a, i) => a + i.qty, 0),
-        message:  obs || null,
-        source:   'formulario-cotacao',
+        name:             nomeCliente,
+        company:          nomeCliente,
+        email:            emailCliente,
+        phone:            docVal ? `${docLabel}: ${docVal}` : null,
+        product:          itens,
+        quantity:         cotacao.reduce((a, i) => a + i.qty, 0),
+        message:          obs || null,
+        source:           'formulario-cotacao',
+        payment:          pgto || 'A definir',
+        cidade:           end.cidade || null,
+        estado:           end.estado || null,
+        subtotal:         sub,
+        frete_valor:      freteVal,
+        total_valor:      total,
+        modalidade_frete: modFrete,
       };
       fetch('https://crm.nastripack.com.br/api/webhook/lead', {
         method:  'POST',
