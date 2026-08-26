@@ -2184,7 +2184,7 @@ async function carregarCatalogo(){
   const lista=document.getElementById('lista-produtos');
   if(lista) lista.innerHTML='<div class="empty-search" style="gap:10px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Carregando produtos...</div>';
   try{
-    const res=await fetch('https://nastripack-crm.andrenastri.workers.dev/api/produtos');
+    const res=await fetch('https://crm.nastripack.com.br/api/produtos');
     if(res.ok){
       const d=await res.json();
       const todos=(d.produtos||d||[]);
@@ -2722,6 +2722,7 @@ function limparCotacao(){
 }
 
 function gerarWhatsApp(){
+  if(Date.now() < _emailLock){ showToast('Aguarde 30 segundos antes de enviar novamente','error'); return; }
   if(!cotacao.length){ showToast('⚠️ Adicione produtos antes de gerar','error'); return; }
 
   const g = id => document.getElementById(id)?.value || '';
@@ -2950,6 +2951,7 @@ function showToast(msg,type=''){
 
 // ── EMAILJS ──────────────────────────────────────────────────────────────
 emailjs.init('qwmd_Lql-3jRwEoAo');
+let _emailLock = 0; // anti-spam: lock por 30s apos envio
 
 async function enviarEmail(){
   if(!cotacao.length){ showToast('⚠️ Adicione produtos antes de enviar','error'); return; }
@@ -3047,15 +3049,16 @@ async function enviarEmail(){
         message:  obs || null,
         source:   'formulario-cotacao',
       };
-      fetch('https://nastripack-crm.andrenastri.workers.dev/api/webhook/lead', {
+      fetch('https://crm.nastripack.com.br/api/webhook/lead', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Webhook-Secret': '7bdfdce6ed87cbfd6326c12d0685de3338760769' },
+        headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(crmPayload),
       }).catch(e => console.warn('CRM webhook:', e));
     } catch(crmErr) {
       console.warn('CRM webhook erro:', crmErr);
     }
 
+    _emailLock = Date.now() + 30000;
     showToast('\u2705 Cotação enviada por e-mail!', 'success');
     // Limpar carrinho e localStorage após envio bem-sucedido
     cotacao = [];
