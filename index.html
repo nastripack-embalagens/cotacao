@@ -2199,7 +2199,7 @@ async function carregarCatalogo(){
   }
 }
 
-let cotacao=[], modalidade='retirada', filtroAtivo='Todos';
+let cotacao=[], modalidade='retirada', filtroAtivo='Todos', cotacaoEnviada=false, nomeClienteEnviado='';
 
 function fmtMoeda(v){return'R$ '+v.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
 function getChecksFiltro(){
@@ -2360,6 +2360,20 @@ function atualizarTotais(){
 function renderCotacao(){
   const lista=document.getElementById('lista-cotacao');
   const area=document.getElementById('total-area');
+  if(cotacaoEnviada){
+    lista.innerHTML=`<div class="cotacao-empty" style="gap:18px">
+      <span class="icon" style="background:rgba(16,185,129,.12);border-radius:50%;padding:18px;display:inline-flex">
+        <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </span>
+      <h3 style="color:#10b981;font-size:1.25rem">Cotação enviada com sucesso!</h3>
+      <p style="color:var(--text-muted);font-size:.95rem;max-width:300px;text-align:center">Olá, <strong>${nomeClienteEnviado}</strong>!<br>Sua cotação foi recebida.<br>Em breve nossa equipe entrará em contato.</p>
+      <button onclick="novaCotacao()" style="margin-top:8px;padding:10px 28px;border-radius:8px;background:#10b981;color:#fff;border:none;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova cotação
+      </button>
+    </div>`;
+    area.style.display='none';return;
+  }
   if(!cotacao.length){
     lista.innerHTML=`<div class="cotacao-empty">
       <span class="icon"><i data-lucide="clipboard-list" class="lc" style="width:56px;height:56px;stroke:var(--text-muted)"></i></span>
@@ -2925,6 +2939,13 @@ function finalizarCotacao(){
   showTab('cliente');
 }
 
+function novaCotacao(){
+  cotacaoEnviada = false;
+  nomeClienteEnviado = '';
+  renderCotacao();
+  showTab('produtos');
+}
+
 function showTab(tab){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   ['tab-produtos','tab-cliente-body','tab-cotacao-body'].forEach(id=>document.getElementById(id).style.display='none');
@@ -3069,13 +3090,15 @@ async function enviarEmail(){
     }
 
     _emailLock = Date.now() + 30000;
-    showToast('\u2705 Cotação enviada por e-mail!', 'success');
+    showToast('\u2705 Cotação enviada com sucesso!', 'success');
     // Limpar carrinho e localStorage após envio bem-sucedido
+    cotacaoEnviada = true;
+    nomeClienteEnviado = nomeCliente;
     cotacao = [];
     atualizarBadge();
-    renderCotacao();
     renderCartItems();
     try { localStorage.removeItem('nsp_cotacao'); } catch(e) {}
+    showTab('cotacao');
     btn.innerHTML = '<i data-lucide="check-circle" class="lc lc-md"></i> E-mail enviado!';
     lucide.createIcons();
     setTimeout(() => {
