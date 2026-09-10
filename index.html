@@ -1675,6 +1675,74 @@ body::after{
 .dyn-thumbs{display:flex;gap:7px;flex-wrap:wrap}
 .dyn-thumb{width:56px;height:56px;object-fit:contain;border-radius:8px;border:2px solid var(--border);cursor:pointer;background:var(--surface-2);transition:border-color .15s}
 .dyn-thumb.active,.dyn-thumb:hover{border-color:var(--accent)}
+
+/* ── Rolagem da coluna de produtos (desktop) ─────────────────────────
+   A pagina inteira nao rola mais: quem rola e a coluna central. A barra
+   nativa fica escondida e no lugar dela ficam dois botoes redondos
+   brancos, discretos, ao lado direito dos cards. */
+@media (min-width:900px){
+  body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  header.header{flex:0 0 auto;}
+  .tabs-wrapper{flex:0 0 auto;position:static;}
+
+  main.body{
+    flex:1 1 auto;
+    min-height:0;              /* sem isto o flex nao deixa o filho rolar */
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    scroll-behavior:smooth;
+    scrollbar-width:none;      /* Firefox */
+  }
+  main.body::-webkit-scrollbar{width:0;height:0;display:none;}
+
+  /* Controle de setas, colado a direita da coluna de produtos */
+  .scroll-setas{
+    position:fixed;
+    top:50%;
+    left:calc(50% + 356px);
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:150;
+  }
+  .scroll-seta{
+    width:38px;height:38px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    /* branco luminoso, porem discreto: quase so o contorno brilha */
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.55);
+    color:#fff;
+    cursor:pointer;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    box-shadow:0 0 9px rgba(255,255,255,.16), inset 0 0 7px rgba(255,255,255,.07);
+    transition:all .18s ease;
+    padding:0;
+  }
+  .scroll-seta:hover:not(:disabled){
+    background:rgba(255,255,255,.16);
+    border-color:rgba(255,255,255,.9);
+    box-shadow:0 0 16px rgba(255,255,255,.35), inset 0 0 9px rgba(255,255,255,.12);
+    transform:scale(1.08);
+  }
+  .scroll-seta:active:not(:disabled){transform:scale(.94);}
+  .scroll-seta:disabled{opacity:.18;cursor:default;box-shadow:none;}
+  .scroll-seta svg{
+    width:17px;height:17px;
+    filter:drop-shadow(0 0 4px rgba(255,255,255,.5));
+  }
+}
+/* No celular a rolagem nativa continua como sempre foi */
+@media (max-width:899px){
+  .scroll-setas{display:none;}
+}
 </style>
 </head>
 <body>
@@ -2177,6 +2245,16 @@ body::after{
 </section>
 
 </main>
+
+<!-- Setas de rolagem da coluna de produtos (desktop) -->
+<div class="scroll-setas" id="scroll-setas" aria-hidden="true">
+  <button class="scroll-seta" id="seta-cima" onclick="rolarLista(-1)" title="Subir" aria-label="Subir">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+  <button class="scroll-seta" id="seta-baixo" onclick="rolarLista(1)" title="Descer" aria-label="Descer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -12336,5 +12414,65 @@ carregarCatalogo().then(()=>{
   </div>
 </div>
 <!-- ================================ -->
+<script>
+/* Rolagem da coluna de produtos.
+   Os dois botoes rolam 80% da altura visivel e se apagam ao chegar no fim.
+   A roda do mouse rola a coluna de qualquer ponto da pagina. */
+(function(){
+  var main  = document.querySelector('main.body');
+  var cima  = document.getElementById('seta-cima');
+  var baixo = document.getElementById('seta-baixo');
+  var caixa = document.getElementById('scroll-setas');
+  if(!main || !cima || !baixo || !caixa) return;
+
+  window.rolarLista = function(dir){
+    main.scrollBy({ top: dir * main.clientHeight * 0.8, behavior: 'smooth' });
+  };
+
+  function atualizar(){
+    var fim = main.scrollHeight - main.clientHeight;
+    cima.disabled  = main.scrollTop <= 2;
+    baixo.disabled = main.scrollTop >= fim - 2;
+    caixa.style.visibility = (fim > 8 && window.innerWidth >= 900) ? 'visible' : 'hidden';
+  }
+
+  main.addEventListener('scroll', atualizar, { passive:true });
+  window.addEventListener('resize', atualizar);
+  new MutationObserver(atualizar).observe(main, { childList:true, subtree:true });
+  atualizar();
+
+  /* Roda do mouse: como quem rola agora e a coluna central (o body tem
+     overflow:hidden no desktop), girar a roda com o cursor sobre o fundo
+     escuro nao faria nada. Aqui repassamos o giro para a coluna, venha ele
+     de onde vier -- menos de dentro de algo que ja rola sozinho
+     (modal, textarea, lista com scroll proprio). */
+  function jaRolaSozinho(el){
+    while(el && el !== document.body && el !== document.documentElement){
+      if(el === main) return true;                    // ja e a coluna: nativo resolve
+      if(el.nodeType === 1){
+        var s  = getComputedStyle(el);
+        var oy = s.overflowY;
+        if((oy === 'auto' || oy === 'scroll') &&
+           el.scrollHeight > el.clientHeight + 2) return true;
+      }
+      el = el.parentNode;
+    }
+    return false;
+  }
+
+  window.addEventListener('wheel', function(e){
+    if(window.innerWidth < 900) return;               // celular: rolagem nativa
+    if(e.ctrlKey) return;                             // zoom do navegador
+    if(main.scrollHeight <= main.clientHeight + 2) return;
+    if(jaRolaSozinho(e.target)) return;
+
+    var passo = e.deltaMode === 1 ? e.deltaY * 18                    // linhas
+              : e.deltaMode === 2 ? e.deltaY * main.clientHeight     // paginas
+              : e.deltaY;                                            // pixels
+    main.scrollTop += passo;
+    e.preventDefault();
+  }, { passive:false });
+})();
+</script>
 </body>
 </html>
